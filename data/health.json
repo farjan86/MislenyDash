@@ -1,0 +1,227 @@
+{
+  "updated": "2026-07-19",
+  "source": "https://kozarmisleny.hu/onkormanyzat/egeszsegugy/",
+  "pharmacies": [
+    {
+      "name": "Szent Korona Gyógyszertár",
+      "address": "Mikszáth Kálmán u. 11.",
+      "phone": "+36 72 371 854",
+      "hours": {
+        "mon": [["08:00", "17:00"]], "tue": [["08:00", "17:00"]],
+        "wed": [["08:00", "17:00"]], "thu": [["08:00", "17:00"]],
+        "fri": [["08:00", "17:00"]], "sat": [["08:00", "12:00"]], "sun": []
+      }
+    },
+    {
+      "name": "Spartacus Gyógyszertár",
+      "address": "Orgona u. 15.",
+      "phone": "+36 72 570 091",
+      "hours": {
+        "mon": [["09:00", "18:00"]], "tue": [["09:00", "18:00"]],
+        "wed": [["09:00", "18:00"]], "thu": [["09:00", "18:00"]],
+        "fri": [["09:00", "18:00"]], "sat": [], "sun": []
+      }
+    }
+  ],
+  "pharmacyDuty": {
+    "note": "Éjszaka és hétvégén a helyi patikák zárva — az ügyelet Pécsett van (SIPO Zsolnay Patika 0–24, plusz éjszakánként váltó második gyógyszertár).",
+    "url": "https://pecs.hu/gyogyszertari-ugyeletek-patikai-ugyeletek/"
+  },
+  "doctors": {
+    "gp": [
+      {
+        "name": "Dr. Molnár Csilla", "role": "Háziorvos · 1. körzet",
+        "address": "Pécsi u. 2/1.", "phone": "+36 20 912 9889",
+        "hours": {
+          "mon": [["08:00", "12:00"]], "tue": [["12:00", "16:00"]],
+          "wed": [["08:00", "12:00"]], "thu": [["13:00", "16:00"]],
+          "fri": [["08:00", "11:00"]], "sat": [], "sun": []
+        },
+        "area": "Alkotmány tér, Pécsi u., Újtelep u., Falufeletti dűlő, Alsóhegy dűlő, Petőfi u., Október 23. tér, Felsőbotos dűlő, Hunyadi u., Rákóczi u., Janikovszky É. u., Nagyszéki dűlő, Ibolya u., Széchenyi u., Pinty u., Rétföldi út, Jácint u., Székely B. u., Öregtemetői út, Belső ipartelep, Kossuth L. u., Túlsóhegy dűlő, Sas u., Akácos dűlő, Március 15. tér, Vadvirág u., Fészek tető, Nárcisz u., Viola u., Újpetrei út, Öregszőlő dűlő, Malomrét u., Hunyadi köz, Kiskozári út, Fűzfa u., Sólyom u."
+      },
+      {
+        "name": "Dr. Rumbus Zoltán", "role": "Háziorvos · 2. körzet",
+        "address": "Orgona u. 14.", "phone": "+36 72 371 031",
+        "hours": {
+          "mon": [["13:00", "17:00"]], "tue": [["08:00", "12:00"]],
+          "wed": [["13:00", "16:00"]], "thu": [["08:00", "12:00"]],
+          "fri": [["08:00", "11:00"]], "sat": [], "sun": []
+        },
+        "area": "Ady E. u., Munkácsy M. u., Kálvin tér, Gerle u., Csikósvölgy u., Orgona u., Szabó L. u., Gólya u., Gárdonyi G. u., Radnóti M. u., Somerdői út, Rigó u., József A. u., Rózsa u., Cseri út, Harkály u., Kinizsi u., Toldi u., Csóka u., Palánkvár u., Mikszáth K. út, Tompa M. u., Kápolna dűlő, Fecske u., Móra F. u., Zrínyi u., Cinege u., Csikós köz, Móricz Zs. tér, Kamilla u., Augusztus 20. tér, Pacsirta u., Pusztarét u., Liliom u., Fürj u., Szőlő u., Margaréta u., Fülemüle u."
+      }
+    ],
+    "pediatric": [
+      {
+        "name": "Dr. Ritter Ágnes", "role": "Gyermekorvos · 1. körzet",
+        "address": "Alkotmány tér 54.", "phone": "",
+        "hours": {
+          "mon": [["08:00", "11:00"]], "tue": [["12:30", "15:00"]],
+          "wed": [["10:00", "12:00"]], "thu": [["12:00", "15:00"]],
+          "fri": [["07:30", "11:00"]], "sat": [], "sun": []
+        },
+        "area": "Ady E. u., Ibolya u., Cinege u., Október 23. tér, Alkotmány tér, Jácint u., Csikós köz, Pacsirta u., Gárdonyi G. u., Kamilla u., Fecske u., Nagyszéki dűlő, Munkácsy M. u., Nárcisz u., Fülemüle u., Rétföldi út, Móra F. u., Orgona u., Fürj u., Toldi u., Rózsa u., Gerle u., Zrínyi u., Viola u., Kálvin tér, Kinizsi u., Liliom u., Kápolna dűlő, Margaréta u., Rigó u., Somerdői út, Vadvirág u., Újpetrei út, Felsőbotos dűlő"
+      },
+      {
+        "name": "Dr. Thamó Kinga", "role": "Gyermekorvos · 2. körzet",
+        "address": "Alkotmány tér 54.", "phone": "+36 70 785 9564",
+        "hours": {
+          "mon": [["12:00", "15:00"]], "tue": [["08:00", "11:00"]],
+          "wed": [["12:00", "15:00"]], "thu": [["08:00", "11:00"]],
+          "fri": [["11:00", "14:00"]], "sat": [], "sun": []
+        },
+        "extra": "Prevenciós rendelés: Kedd 11:00–12:00, Csütörtök 11:00–12:00",
+        "area": "Alsóhegy dűlő, Móricz Zs. tér, Malomrét u., Sas u., Csikósvölgy u., Öregszőlő dűlő, Újtelep u., Fészek tető, Fűzfa u., Pécsi u., Kiskozár út, Szabó L. u., Hunyadi u., Petőfi u., Csóka u., Pinty u., József A. u., Pusztarét u., Falufeletti dűlő, Palánkvár u., Kossuth L. u., Radnóti M. u., Gólya u., Öregtemetői út, Március 15. tér, Rákóczi u., Harkály u., Akácos dűlő, Mikszáth K. út, Széchenyi u., Hunyadi köz, Augusztus 20. tér, Székely B. u., Szőlő u., Janikovszky É. u., Belső ipartelep, Tompa M. u., Túlsóhegy dűlő, Sólyom u., Cseri út"
+      }
+    ],
+    "dentist": [
+      {
+        "name": "Dr. Pirk Tibor", "role": "Fogorvos · 1. körzet",
+        "address": "Orgona u. 14.", "phone": "+36 72 570 205 / +36 20 409 3793",
+        "hours": {
+          "mon": [["14:00", "18:00"]], "tue": [["07:00", "13:00"]],
+          "wed": [["14:00", "18:00"]], "thu": [["07:00", "13:00"]],
+          "fri": [["08:00", "12:00"]], "sat": [], "sun": []
+        },
+        "extra": "Iskolafogászat: Hétfő 14:00–18:00",
+        "area": "Alkotmány tér, Csikós köz, Gárdonyi Géza u., Ibolya u., Jácint u., József Attila u., Kamilla u., Kálvin tér, Kinizsi u., Liliom u., Március 15. tér, Margaréta u., Mikszáth Kálmán út, Móricz Zsigmond tér, Nárcisz u., Orgona u., Pécsi u., Radnóti Miklós u., Rózsa u., Széchenyi u., Székely Bertalan u., Toldi u., Tompa Mihály u., Viola u., Zrínyi u."
+      },
+      {
+        "name": "Dr. Magyar Viktória", "role": "Fogorvos · 3. körzet",
+        "address": "Pécsi u. 126.", "phone": "+36 72 570 062",
+        "hours": {
+          "mon": [["07:30", "13:30"]], "tue": [["07:30", "13:30"]],
+          "wed": [["12:00", "18:00"]], "thu": [["07:30", "13:30"]],
+          "fri": [], "sat": [], "sun": []
+        }
+      }
+    ]
+  },
+  "vets": [
+    {
+      "name": "Dr. Reisz György", "role": "Állatorvos",
+      "address": "Mikszáth Kálmán u. 37.",
+      "phone": "+36 72 371 083 / +36 20 957 8767",
+      "web": "", "hours": null
+    },
+    {
+      "name": "Dr. Hegyi Orsolya", "role": "Állatorvos",
+      "address": "Orgona u. 7.",
+      "phone": "+36 30 301 1789",
+      "web": "http://www.mislenyiallatorvos.hu",
+      "hours": {
+        "mon": [["09:00", "11:00"], ["16:00", "18:30"]],
+        "tue": [["09:00", "11:00"], ["16:00", "18:30"]],
+        "wed": [["09:00", "11:00"], ["16:00", "18:30"]],
+        "thu": [["09:00", "11:00"], ["16:00", "18:30"]],
+        "fri": [["09:00", "11:00"], ["16:00", "18:30"]],
+        "sat": [], "sun": []
+      }
+    }
+  ],
+  "healthVisitors": [
+    {
+      "name": "Kövesligeti Kutnyánszky Lilla", "role": "1-es körzet",
+      "address": "Alkotmány tér 54. (Általános Iskola alsó tagozat)",
+      "phone": "+36 72 370 168 / +36 30 177 4376",
+      "schedule": [
+        { "label": "Várandós- és csecsemő tanácsadás", "when": "Szerda 8:00–12:00" },
+        { "label": "Csecsemő tanácsadás orvossal", "when": "Kedd 12:30–14:30" },
+        { "label": "Fogadóóra", "when": "Hétfő 8:00–9:00" }
+      ],
+      "area": "József A. u., Március 15. tér, Mikszáth K. u., Móricz Zs. tér, Széchenyi u., Székely B. u., Tompa M. u., Fecske u., Fürj u., Pinty u., Sólyom u., Cinege u., Gerle u., Október 23. tér, Fülemüle u., Fészek lakópark, Szemely, Szemely–Szentkútpuszta"
+    },
+    {
+      "name": "Wingertné Héjjas Éva", "role": "2-es körzet",
+      "address": "Alkotmány tér 54. (Óvoda)",
+      "phone": "+36 72 370 168 / +36 30 177 4802",
+      "schedule": [
+        { "label": "Várandós- és csecsemő tanácsadás", "when": "Kedd 8:00–12:00" },
+        { "label": "Csecsemő tanácsadás orvossal", "when": "Kedd 12:30–14:30" }
+      ],
+      "area": "Ady E. u., Alkotmány tér, Petőfi S. u., Hunyadi u., Kossuth u., Rákóczi u., Alsóhegy dűlő, Túlsóhegy dűlő, Öregszőlő d., Csikósvölgy u., Pusztarét u., Pécsi u., Kiskozári u., Malomrét u., Szőlő u., Fűzfa u., Újtelep u., Sas u., Palánkvár u., Pécsudvard"
+    },
+    {
+      "name": "Gyöngyiné Győrfi Tünde", "role": "3-as körzet",
+      "address": "Alkotmány tér 54. (Óvoda)",
+      "phone": "+36 72 370 168 / +36 30 177 5944",
+      "schedule": [
+        { "label": "Várandós- és csecsemő tanácsadás", "when": "Hétfő 8:00–12:00" },
+        { "label": "Csecsemő tanácsadás orvossal", "when": "Szerda 12:00–14:00" }
+      ],
+      "area": "Zrínyi u., Toldi u., Kinizsi u., Gárdonyi u., Munkácsy u., Móra F. u., Orgona u., Rózsa u., Nárcisz u., Viola u. 27.-, Viola u. 20.-, Jácint u., Ibolya u., Birján, Birján-Józsefmajor"
+    },
+    {
+      "name": "Horváth Mónika", "role": "4-es körzet",
+      "address": "Alkotmány tér 54. (Általános Iskola felső tagozat)",
+      "phone": "+36 72 370 168 / +36 30 177 5961",
+      "schedule": [
+        { "label": "Várandós- és csecsemő tanácsadás", "when": "Csütörtök 8:00–12:00" },
+        { "label": "Csecsemő tanácsadás orvossal", "when": "Szerda 12:00–14:00" }
+      ],
+      "area": "Kamilla u., Liliom u., Margaréta u., Viola u. 1-25., Viola u. 2-18., Fűzfa lakópark, Vadvirág u., Lothárd"
+    },
+    {
+      "name": "Stangl-Vincze Virág", "role": "5-ös körzet",
+      "address": "Alkotmány tér 54.",
+      "phone": "+36 72 370 168 / +36 30 177 4457",
+      "schedule": [
+        { "label": "Fogadóóra", "when": "Péntek 8:00–14:00" }
+      ],
+      "area": "Iskola-egészségügyi ellátás"
+    }
+  ],
+  "emergency": {
+    "note": "Kozármislenyt a pécsi ügyeletek látják el. Életveszély esetén azonnal 112!",
+    "source": "https://kozarmisleny.hu/onkormanyzat/egeszsegugy/",
+    "life": {
+      "label": "Életveszély, súlyos baleset",
+      "tel": "112",
+      "dial": "112",
+      "alt": "104",
+      "note": "Eszméletlenség, erős vérzés, mellkasi fájdalom, súlyos sérülés"
+    },
+    "central": {
+      "label": "Központi orvosi ügyelet",
+      "tel": "1830",
+      "dial": "1830",
+      "hours": "Hétköznap 16–8, hétvégén és ünnepnap 0–24",
+      "desc": "Rendelési időn kívül ezt a számot hívd (nem életveszély esetén) — diszpécser irányít vagy kiküldi az ügyeletet."
+    },
+    "dental": {
+      "name": "Fogászati ügyelet",
+      "addr": "7623 Pécs, Tüzér u. 1.",
+      "tel": "72/502-422",
+      "dial": "+3672502422",
+      "hours": "Vasárnap, ünnep- és munkaszüneti nap 7–13"
+    },
+    "adult": {
+      "place": "400 ágyas klinika",
+      "addr": "7624 Pécs, Ifjúság útja 13.",
+      "duty": {
+        "label": "Nem életveszélyes ügyelet",
+        "tel": "1830",
+        "dial": "1830",
+        "note": "Honvéd utcai bejárat"
+      },
+      "emergency": {
+        "label": "Baleset / sürgősségi (SBO)",
+        "tel": "72/535-850",
+        "dial": "+3672535850"
+      }
+    },
+    "child": {
+      "place": "Gyermekklinika",
+      "addr": "7623 Pécs, József Attila u. 7.",
+      "duty": {
+        "label": "Ügyelet (0–24)",
+        "tel": "72/515-104",
+        "dial": "+3672515104"
+      },
+      "emergency": {
+        "label": "Baleset / sürgősségi",
+        "tel": "72/536-000",
+        "dial": "+3672536000"
+      }
+    }
+  }
+}

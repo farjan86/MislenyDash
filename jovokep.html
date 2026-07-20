@@ -1,0 +1,607 @@
+<style>
+  :root{
+    --paper:#f4f3ec; --card:#fffdf8; --ink:#19221c; --ink-soft:#535d57;
+    --line:rgba(25,34,28,.12); --line-strong:rgba(25,34,28,.22);
+    --green:#23503f; --green-d:#1c4132; --green-soft:#e2ebe6;
+    --amber:#b07a1c; --amber-soft:#f4e8ce;
+    --brick:#98492e; --brick-soft:#efdfd7;
+    --blue:#2b3a6b; --blue-soft:#dde2f2;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Consolas,monospace;
+    --wrap:960px;
+  }
+  *{box-sizing:border-box}
+  .page{margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); line-height:1.6; font-size:17px; padding:0 20px 110px}
+  .wrap{max-width:var(--wrap); margin:0 auto}
+  a{color:var(--green); text-underline-offset:3px}
+  h1,h2,h3,h4{font-family:var(--serif); line-height:1.14; text-wrap:balance; margin:0}
+  p{margin:0}
+  em{font-style:italic}
+
+  /* masthead */
+  .masthead{border-bottom:2px solid var(--ink); padding:60px 0 26px; margin-bottom:8px}
+  .kicker{font-family:var(--mono); font-size:12.5px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--amber); margin:0 0 18px; font-weight:600}
+  .masthead h1{font-size:clamp(38px,7vw,66px); font-weight:700; letter-spacing:-.015em}
+  .masthead .sub{font-size:clamp(18px,2.4vw,22px); color:var(--ink-soft);
+    margin-top:16px; max-width:62ch; font-family:var(--serif); font-style:italic}
+  .meta-row{display:flex; flex-wrap:wrap; gap:8px 22px; margin-top:24px;
+    font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); letter-spacing:.03em}
+  .meta-row b{color:var(--ink); font-weight:600}
+
+  /* at a glance stats */
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:2px; margin:26px 0 6px; background:var(--line); border:1px solid var(--line);
+    border-radius:6px; overflow:hidden}
+  .stat{background:var(--card); padding:18px 18px}
+  .stat .big{font-family:var(--serif); font-size:34px; font-weight:700; color:var(--green);
+    font-variant-numeric:tabular-nums; line-height:1}
+  .stat .lbl{font-family:var(--mono); font-size:11px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--ink-soft); margin-top:8px}
+
+  /* toc */
+  nav.toc{margin:30px 0 10px; padding:20px 22px; background:var(--card);
+    border:1px solid var(--line); border-radius:6px}
+  nav.toc .lbl{font-family:var(--mono); font-size:11.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:12px}
+  nav.toc ol{margin:0; padding:0; list-style:none; counter-reset:t;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:5px 26px}
+  nav.toc li{counter-increment:t; font-size:15px}
+  nav.toc li a{text-decoration:none; display:flex; gap:10px; padding:3px 0}
+  nav.toc li a:hover{color:var(--amber)}
+  nav.toc li a::before{content:counter(t,decimal-leading-zero);
+    font-family:var(--mono); font-size:12px; color:var(--amber); padding-top:2px}
+
+  section{padding:48px 0 8px; scroll-margin-top:16px}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.15em;
+    text-transform:uppercase; color:var(--green); font-weight:600; margin-bottom:10px}
+  h2{font-size:clamp(26px,4vw,38px); font-weight:700; letter-spacing:-.01em}
+  .lede{color:var(--ink-soft); margin-top:12px; font-size:18px; max-width:68ch}
+
+  /* summary block */
+  .summary{margin-top:24px; padding:26px 28px; background:var(--card);
+    border:1px solid var(--line); border-left:4px solid var(--green); border-radius:6px}
+  .summary p+p{margin-top:12px}
+  .summary .big-q{font-family:var(--serif); font-size:20px; color:var(--green); font-style:italic}
+
+  /* layer cards */
+  .layers{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; margin-top:24px}
+  .layer{background:var(--card); border:1px solid var(--line); border-radius:6px;
+    padding:20px; border-top:3px solid var(--green)}
+  .layer.b{border-top-color:var(--amber)} .layer.c{border-top-color:var(--brick)}
+  .layer .tag{font-family:var(--mono); font-size:12px; font-weight:600}
+  .layer.a .tag{color:var(--green)} .layer.b .tag{color:var(--amber)} .layer.c .tag{color:var(--brick)}
+  .layer h4{font-size:19px; margin:8px 0 8px}
+  .layer p{font-size:14.5px; color:var(--ink-soft)}
+  .layer .cost{margin-top:14px; font-family:var(--mono); font-size:11.5px;
+    color:var(--ink-soft); border-top:1px dashed var(--line); padding-top:10px}
+
+  /* hook */
+  .hook{margin-top:26px; background:linear-gradient(180deg,#26543f,#1c4030);
+    color:#f4f1e6; border-radius:8px; padding:34px 32px; position:relative; overflow:hidden}
+  .hook::after{content:"★"; position:absolute; right:22px; top:6px; font-size:120px;
+    color:rgba(255,255,255,.06); line-height:1}
+  .hook .eyebrow{color:#e7c579}
+  .hook h3{color:#fff; font-size:25px; margin:6px 0 12px; max-width:26ch}
+  .hook p{color:rgba(244,241,230,.9); max-width:66ch; font-size:16px}
+  .hook .why{margin-top:16px; display:grid; gap:8px}
+  .hook .why div{padding-left:20px; position:relative; font-size:15px}
+  .hook .why div::before{content:"→"; position:absolute; left:0; color:#e7c579}
+  .hook .status{margin-top:20px; display:inline-block; font-family:var(--mono);
+    font-size:12px; background:rgba(231,197,121,.18); color:#f0d79a; padding:6px 12px; border-radius:20px}
+
+  /* pillars */
+  .pillar{margin-top:34px; border:1px solid var(--line); border-radius:8px;
+    background:var(--card); overflow:hidden}
+  .pillar-head{display:flex; gap:18px; align-items:flex-start; padding:22px 24px;
+    background:linear-gradient(180deg,#eef1eb,#e7ece7); border-bottom:1px solid var(--line)}
+  .pillar.money .pillar-head{background:linear-gradient(180deg,#f7ecd6,#f2e4c8)}
+  .pillar-num{font-family:var(--serif); font-size:44px; font-weight:700; color:var(--green);
+    line-height:.9; min-width:52px}
+  .pillar.money .pillar-num{color:var(--amber)}
+  .pillar-head h3{font-size:24px}
+  .pillar-head .role{font-family:var(--mono); font-size:11.5px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--green); font-weight:600; margin-bottom:6px}
+  .pillar.money .pillar-head .role{color:var(--amber)}
+  .pillar-head p{font-size:14.5px; color:var(--ink-soft); margin-top:6px; max-width:60ch}
+  .ideas{display:grid; grid-template-columns:repeat(auto-fill,minmax(255px,1fr));
+    gap:1px; background:var(--line)}
+  .idea{background:var(--card); padding:16px 18px; display:flex; flex-direction:column; gap:6px}
+  .idea.star{background:#fffaef}
+  .idea h4{font-size:16px; font-weight:700}
+  .idea p{font-size:13.5px; color:var(--ink-soft)}
+  .idea ul.feat{margin:0; padding-left:16px; display:flex; flex-direction:column; gap:3px; flex:1}
+  .idea ul.feat li{font-size:12.5px; color:var(--ink-soft); line-height:1.4}
+  .idea ul.feat li::marker{color:var(--amber)}
+  .idea .biz{font-size:12.5px; color:var(--brick); font-family:var(--mono);
+    line-height:1.45; border-top:1px dashed var(--line); padding-top:7px; margin-top:2px}
+  .chips{display:flex; flex-wrap:wrap; gap:5px}
+  .chip{font-family:var(--mono); font-size:10px; letter-spacing:.03em; font-weight:600;
+    padding:3px 7px; border-radius:20px; text-transform:uppercase; white-space:nowrap}
+  .chip.rev{background:var(--brick); color:#fff}
+  .chip.hook{background:#26543f; color:#e7c579}
+  .chip.trust{background:var(--green-soft); color:var(--green)}
+  .chip.data{background:#e6edf0; color:#33627a}
+  .chip.new{background:var(--amber-soft); color:var(--amber)}
+  .chip.fun{background:#ece0f2; color:#7a4499}
+
+  /* cross-cutting views */
+  .views{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:22px}
+  .view{background:var(--card); border:1px solid var(--line); border-radius:6px; padding:20px 22px}
+  .view h4{font-size:19px; margin-bottom:6px}
+  .view p.i{font-size:14px; color:var(--ink-soft); margin-bottom:10px}
+  .view ul{margin:0; padding-left:18px} .view li{font-size:14px; margin:4px 0}
+
+  /* youth */
+  .youth-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+    gap:12px; margin-top:20px}
+  .ychip{background:var(--card); border:1px solid var(--line); border-radius:6px;
+    padding:14px 16px; border-left:3px solid var(--blue)}
+  .ychip h4{font-size:15px; margin-bottom:4px}
+  .ychip p{font-size:13px; color:var(--ink-soft)}
+
+  /* engine diagram */
+  .motor{margin-top:22px}
+  .flow{display:flex; flex-wrap:wrap; align-items:stretch; gap:10px; margin-top:14px}
+  .node{background:var(--card); border:1px solid var(--line-strong); border-radius:8px;
+    padding:16px 18px; flex:1; min-width:150px}
+  .node .t{font-family:var(--mono); font-size:11px; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px}
+  .node .m{font-family:var(--serif); font-weight:700; font-size:18px}
+  .node.tri{background:var(--green); color:#fff; border-color:var(--green)}
+  .node.tri .t{color:#bcd3c8} .node.tri .m{color:#fff}
+  .node.tri .three{margin-top:8px; display:flex; flex-direction:column; gap:4px;
+    font-size:13px; font-family:var(--sans); font-weight:400; color:#e5efe9}
+  .arrow{display:flex; align-items:center; color:var(--amber); font-size:22px; font-weight:700}
+  .motor-note{margin-top:16px; padding:18px 20px; background:var(--green-soft);
+    border-radius:6px; font-size:15px}
+  .motor-tablewrap{overflow-x:auto; margin-top:16px; border:1px solid var(--line); border-radius:6px}
+  table{border-collapse:collapse; width:100%; min-width:620px; background:var(--card)}
+  th,td{text-align:left; padding:11px 14px; vertical-align:top; font-size:14px; border-bottom:1px solid var(--line)}
+  thead th{background:#eef0ea; font-family:var(--mono); font-size:11px; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--ink-soft); font-weight:600}
+  tbody tr:last-child td{border-bottom:none}
+  td .name{font-weight:700; font-family:var(--serif)}
+  td.gap{color:var(--brick)} td.has{color:var(--green)}
+
+  /* revenue list */
+  .rev-list{margin-top:18px; display:grid; gap:0; counter-reset:r;
+    border:1px solid var(--line); border-radius:6px; overflow:hidden}
+  .rev-item{display:flex; gap:16px; padding:16px 20px; border-bottom:1px solid var(--line); background:var(--card)}
+  .rev-item:last-child{border-bottom:none}
+  .rev-item.strong{background:#fffaef}
+  .rev-item .num{counter-increment:r; font-family:var(--mono); font-weight:700; color:var(--brick); font-size:15px; min-width:26px}
+  .rev-item .num::before{content:counter(r,decimal-leading-zero)}
+  .rev-item h4{font-size:16px; margin-bottom:3px}
+  .rev-item p{font-size:14px; color:var(--ink-soft)}
+  .rev-item .scale{font-family:var(--mono); font-size:11.5px; color:var(--brick); margin-top:6px; letter-spacing:.02em}
+  .strength{font-family:var(--mono); font-size:10.5px; font-weight:600; padding:2px 8px;
+    border-radius:20px; align-self:flex-start; white-space:nowrap}
+  .strength.hi{background:var(--brick); color:#fff}
+  .strength.mid{background:var(--amber-soft); color:var(--amber)}
+  .strength.lo{background:var(--green-soft); color:var(--green)}
+
+  /* expansion */
+  .expand{margin-top:22px; padding:28px 30px; border-radius:8px;
+    background:linear-gradient(160deg,#26543f,#1a3d2e); color:#eef2ec}
+  .expand .eyebrow{color:#e7c579}
+  .expand h3{color:#fff; font-size:24px; margin-bottom:12px}
+  .expand p{color:rgba(238,242,236,.9); max-width:68ch} .expand p+p{margin-top:12px}
+  .expand .math{margin-top:18px; display:flex; flex-wrap:wrap; gap:14px}
+  .expand .math div{background:rgba(255,255,255,.08); border-radius:6px; padding:14px 18px; flex:1; min-width:160px}
+  .expand .math .n{font-family:var(--serif); font-size:26px; font-weight:700; color:#e7c579}
+  .expand .math .l{font-size:13px; color:rgba(238,242,236,.85); margin-top:4px}
+
+  /* position */
+  .position{margin-top:24px; padding:26px 30px; background:var(--amber-soft);
+    border-radius:8px; border-left:4px solid var(--amber)}
+  .position h3{font-size:22px; margin-bottom:10px}
+  .position p{max-width:72ch} .position p+p{margin-top:10px}
+  .position .punch{font-family:var(--serif); font-style:italic; font-size:20px; color:var(--green); margin-top:16px}
+
+  /* verdict */
+  .verdict{margin-top:24px; border:1px solid var(--line); border-radius:8px; overflow:hidden}
+  .verdict .cols{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line)}
+  .verdict .col{background:var(--card); padding:22px 24px}
+  .verdict .col h4{font-size:16px; font-family:var(--mono); text-transform:uppercase;
+    letter-spacing:.06em; margin-bottom:12px}
+  .verdict .pro h4{color:var(--green)} .verdict .con h4{color:var(--brick)}
+  .verdict ul{margin:0; padding-left:18px} .verdict li{font-size:14.5px; margin:7px 0}
+  .verdict .call{padding:22px 24px; background:var(--green); color:#f2f6f2}
+  .verdict .call h4{font-size:15px; font-family:var(--mono); text-transform:uppercase; color:#bcd3c8; margin-bottom:8px}
+  .verdict .call p{font-size:16px; max-width:72ch}
+  .verdict .call b{color:#fff}
+  @media(max-width:560px){ .verdict .cols{grid-template-columns:1fr} }
+
+  /* phases */
+  .phases{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; margin-top:22px; counter-reset:p}
+  .phase{background:var(--card); border:1px solid var(--line); border-radius:6px; padding:20px; border-top:3px solid var(--green)}
+  .phase .n{counter-increment:p; font-family:var(--mono); font-size:12px; color:var(--amber); font-weight:600}
+  .phase .n::before{content:"FÁZIS " counter(p)}
+  .phase h4{font-size:18px; margin:6px 0 8px}
+  .phase p{font-size:14px; color:var(--ink-soft)}
+  .phase .out{margin-top:12px; font-family:var(--mono); font-size:11.5px; color:var(--green); border-top:1px dashed var(--line); padding-top:10px}
+
+  .sources{margin-top:52px; padding-top:22px; border-top:2px solid var(--ink)}
+  .sources h3{font-size:15px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.1em; margin-bottom:14px}
+  .sources ul{margin:0; padding:0; list-style:none; display:grid; gap:8px; grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  .sources li{font-size:13.5px; color:var(--ink-soft)}
+  .footnote{margin-top:28px; font-size:13px; color:var(--ink-soft); font-style:italic}
+  @media(max-width:560px){ .page{font-size:16px} .hook,.expand,.position{padding:24px 20px} }
+</style>
+
+<div class="page"><div class="wrap">
+
+  <header class="masthead">
+    <p class="kicker">Jövőkép · belső munkaanyag</p>
+    <h1>Kozármisleny közösségi platform</h1>
+    <p class="sub">Egy hely, ahol a város élő adatai, a lakók egymásnak nyújtott szolgáltatásai és a helyi piac összeérnek — több, mint egy Facebook-csoport, és van benne üzlet.</p>
+    <div class="meta-row">
+      <span><b>Munkacím:</b> MislenyDash</span>
+      <span><b>Dátum:</b> 2026. 07. 18.</span>
+      <span><b>Fázis:</b> jövőkép — döntés előtt</span>
+      <span><b>Célváros:</b> Kozármisleny, ~6 900 fő</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="big">6</div><div class="lbl">Pillér</div></div>
+      <div class="stat"><div class="big">70+</div><div class="lbl">Konkrét ötlet</div></div>
+      <div class="stat"><div class="big">6</div><div class="lbl">Bevételi modell</div></div>
+      <div class="stat"><div class="big">1</div><div class="lbl">Közös motor</div></div>
+      <div class="stat"><div class="big">∞</div><div class="lbl">Más települések</div></div>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Tartalom">
+    <div class="lbl">Tartalom</div>
+    <ol>
+      <li><a href="#lenyeg">A lényeg egy percben</a></li>
+      <li><a href="#keret">A három réteg</a></li>
+      <li><a href="#horog">A horog: emlékeztetők</a></li>
+      <li><a href="#pillerek">A 6 pillér — minden ötlet</a></li>
+      <li><a href="#temak">Állatok &amp; gyerekek — átfogó nézetek</a></li>
+      <li><a href="#fiatal">A fiataloknak</a></li>
+      <li><a href="#motor">A kínálati motor — a termék magja</a></li>
+      <li><a href="#uzlet">Üzleti lehetőségek — neked</a></li>
+      <li><a href="#terjeszkedes">A távlati tét: más települések</a></li>
+      <li><a href="#letezik">Létezik-e már ilyen?</a></li>
+      <li><a href="#dontes">Érdemes-e nekivágni?</a></li>
+    </ol>
+  </nav>
+
+  <!-- LÉNYEG -->
+  <section id="lenyeg">
+    <p class="eyebrow">01 — Összefoglaló</p>
+    <h2>A lényeg egy percben</h2>
+    <div class="summary">
+      <p>Kozármislenynek van önkormányzati weboldala, a <b>Munipolis</b> értesítő rendszere és a Facebook-csoport — nagyjából ennyi él ma. Ezek <b>felülről</b> szólnak a lakóhoz (Munipolis: hírek, hibabejelentés, szavazás, push), vagy strukturálatlanul (a FB-poszt elsüllyed, nincs kereshetőség, bizalom, tranzakció, értesítés). Egyik sem csinál helyi piacot, foglalást, szívesség-cserét vagy aggregált élő adatot.</p>
+      <p>Ez a platform a <b>rést</b> tölti be: alulról építkező, közösségi oldal, amely négy dolgot csinál, amit a többiek nem — <b>egy helyre gyűjti az élő városi adatot</b>, <b>személyre szabott hasznot ad</b> (pl. kuka-emlékeztető), <b>strukturált helyi piacot és szolgáltatást</b> kínál valódi tranzakcióval, és <b>külön ad valamit a fiataloknak</b>.</p>
+      <p class="big-q">A nagy kérdés: érdemes-e nekivágni? A rövid válasz lent — de a lényeg, hogy az induló réteg olcsó, a haszna azonnali, a bevétel a tranzakcióban van, a nagy tét pedig a más településekre való kiterjesztés.</p>
+    </div>
+  </section>
+
+  <!-- KERET -->
+  <section id="keret">
+    <p class="eyebrow">02 — Gondolkodási keret</p>
+    <h2>Három réteg, három nagyságrend</h2>
+    <p class="lede">Nem minden ötlet egyforma súlyú. Ez dönti el a költséget és az építés sorrendjét.</p>
+    <div class="layers">
+      <div class="layer a"><span class="tag">A RÉTEG</span><h4>Passzív adat</h4>
+        <p>Read-only, automatikusan frissülő adat. Nincs fiók, nincs moderáció. Idő, hulladék, áramszünet, sport, POI-térkép, nyitvatartások.</p>
+        <div class="cost">Olcsó · statikus · ez hozza a forgalmat és a bizalmat</div></div>
+      <div class="layer b"><span class="tag">B RÉTEG</span><h4>Interaktív közösség</h4>
+        <p>Felhasználók töltenek fel tartalmat: piac, foglalás, kupon, apró, szívesség, üzenőfal, események.</p>
+        <div class="cost">Backend + moderáció · <b>itt van a bevétel</b></div></div>
+      <div class="layer c"><span class="tag">C RÉTEG</span><h4>Elhagyva</h4>
+        <p>GPS-nyomkövetés, élő chat, közös beszerzés. Kockázatos, moderációigényes, vagy egyszerűen „közösködni senki nem szeret”.</p>
+        <div class="cost">Tudatosan kihagyva</div></div>
+    </div>
+  </section>
+
+  <!-- HOROG -->
+  <section id="horog">
+    <p class="eyebrow">03 — A horog</p>
+    <h2>A funkció, amiért visszajárnak</h2>
+    <p class="lede">Kell egy apró, mindennapi haszon, ami újra és újra behozza az embert. Ez az <b>emlékeztető-réteg</b> — és a zászlóshajója a saját bosszúságodból jött.</p>
+    <div class="hook">
+      <p class="eyebrow">Kiemelt funkció</p>
+      <h3>„Holnap szelektív — húzd ki a kukát!”</h3>
+      <p>Személyre szabott értesítés a hulladékszállítás előtti este, utcára és típusra (kommunális / szelektív / zöld) szabva. Ugyanez a motor szól majd: „áramszünet lesz a te utcádban”, „lejár az állatod oltása”, „holnap 10:00 a fodrász-időpontod”.</p>
+      <div class="why">
+        <div>Univerzális fájdalompont — mindenki elfelejti.</div>
+        <div>Heti rutin, nem egyszeri látogatás: ez a visszatérés motorja.</div>
+        <div>Push, e-mail vagy naptár (ICS) alapon, akár fiók nélkül is.</div>
+      </div>
+      <span class="status">Már megvan: a Dél-Kom Kozármisleny-PDF gépileg kiolvasható → a 2026-os menetrend automatikusan feldolgozható.</span>
+    </div>
+  </section>
+
+  <!-- PILLÉREK -->
+  <section id="pillerek">
+    <p class="eyebrow">04 — A szerkezet</p>
+    <h2>A hat pillér — minden ötlet egy helyen</h2>
+    <p class="lede">A ~70 ötlet hat tartóoszlop alá szervezve. A <span class="chip rev">Bevétel</span> jelöli, ahol közvetlen üzleti lehetőség van; a <span class="chip hook">Horog</span> a visszahozó, a <span class="chip trust">Bizalom</span> a közösségépítő, a <span class="chip fun">Fun</span> a szórakoztató funkciókat.</p>
+
+    <!-- P1 -->
+    <div class="pillar">
+      <div class="pillar-head"><div class="pillar-num">1</div><div>
+        <div class="role">A napi haszon · A réteg</div><h3>Élő városi adat</h3>
+        <p>Automatikusan frissülő, olvasható adat egy helyen. Ez a forgalom alapja — ezért jönnek be először.</p></div></div>
+      <div class="ideas">
+        <div class="idea"><h4>Időjárás + előrejelzés</h4><p>Aktuális és 7 napos, Open-Meteo API-ból, kulcs nélkül.</p><ul class="feat"><li>Mai és heti előrejelzés</li><li>Csapadék- és szélriasztás</li><li>Reggeli öltözködési tipp</li></ul><div class="chips"><span class="chip data">Adat</span></div></div>
+        <div class="idea"><h4>Levegőminőség &amp; pollen</h4><p>PM10, parlagfű- és fűpollen az allergiásoknak.</p><ul class="feat"><li>Napi pollenszint</li><li>Levegőminőség-index</li><li>Riasztás érzékenyeknek</li></ul><div class="chips"><span class="chip data">Adat</span></div></div>
+        <div class="idea star"><h4>Hulladéknaptár + emlékeztető</h4><p>Ürítési napok a Dél-Kom PDF-ből, személyre szabott értesítéssel.</p><ul class="feat"><li>Utcád ürítési napjai</li><li>Esti emlékeztető a kukáról</li><li>Lomtalanítás időpontja</li></ul><div class="chips"><span class="chip data">Adat</span><span class="chip hook">Horog</span></div></div>
+        <div class="idea"><h4>Áram- / gáz- / vízszünet</h4><p>E.ON térkép Kozármislenyre szűrve + vízmű értesítők.</p><ul class="feat"><li>Van-e most szünet nálad</li><li>Tervezett munkák előre</li><li>Értesítés a te utcádra</li></ul><div class="chips"><span class="chip data">Adat</span></div></div>
+        <div class="idea"><h4>SE Kozármisleny</h4><p>Következő meccs, eredmény, tabella, forma — nem csak eredmény.</p><ul class="feat"><li>Következő meccs ideje</li><li>Friss eredmény, tabella</li><li>Forma és keret</li></ul><div class="chips"><span class="chip data">Adat</span></div></div>
+        <div class="idea"><h4>Helyi hír-aggregátor</h4><p>kozarmisleny.hu + misleny.hu + bama.hu egy folyamban.</p><ul class="feat"><li>Minden helyi hír egy helyen</li><li>Forrás szerint szűrve</li><li>Push a fontosakról</li></ul><div class="chips"><span class="chip data">Adat</span></div></div>
+        <div class="idea"><h4>POI-térkép</h4><p>Játszótér, defibrillátor, kutyafuttató, e-töltő, közkút, ATM.</p><ul class="feat"><li>Legközelebbi defibrillátor</li><li>Játszóterek, kutyafuttató</li><li>E-töltő, közkút, ATM</li></ul><div class="chips"><span class="chip data">Adat</span></div></div>
+        <div class="idea"><h4>Gyógyszertár + ügyelet</h4><p>Nyitvatartás és a megyei ügyeleti beosztás aktuálisan.</p><ul class="feat"><li>Most nyitva van-e</li><li>Hétvégi/éjszakai ügyelet</li><li>Útvonal oda</li></ul><div class="chips"><span class="chip data">Adat</span></div></div>
+        <div class="idea"><h4>Orvosi rendelés, véradás</h4><p>Háziorvos, gyerekorvos, fogorvos, védőnő + véradó napok.</p><ul class="feat"><li>Ki mikor rendel</li><li>Védőnői órák</li><li>Következő véradás</li></ul><div class="chips"><span class="chip data">Adat</span></div></div>
+      </div>
+    </div>
+
+    <!-- P2 -->
+    <div class="pillar">
+      <div class="pillar-head"><div class="pillar-num">2</div><div>
+        <div class="role">A bizalom · B réteg</div><h3>Szívesség &amp; kölcsönzés</h3>
+        <p>Lakók egymásnak. Ez a közösségi ragasztó — nem közvetlen bevétel, hanem ami emberivé és sajáttá teszi az oldalt.</p></div></div>
+      <div class="ideas">
+        <div class="idea star"><h4>Közösségi szerszámoskamra</h4><p>Fúró, létra, utánfutó, party-sátor — kölcsönadod, amit évi egyszer használnál.</p><ul class="feat"><li>Böngészd, mit adnak kölcsön</li><li>Foglalj időpontra, tégy le kauciót</li><li>Add fel a saját eszközöd</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea star"><h4>Időbank</h4><p>Adok 1 óra segítséget → 1 kredit → később én is lehívom. Óra-alapú csere.</p><ul class="feat"><li>Ajánlj fel 1 óra segítséget</li><li>Kérj segítséget kreditért</li><li>Kövesd az egyenleged</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Távollét-segítség</h4><p>Kertlocsolás, állatetetés, postaláda — amíg nyaralsz. A te ötleted.</p><ul class="feat"><li>Kérj locsolót/állatetetőt</li><li>Vállalj a szomszédnak</li><li>Ismétlődő megbízás</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Idős- és szomszédsegítés</h4><p>Bevásárlás, gyógyszerkiváltás, fűnyírás — szívesség-tábla.</p><ul class="feat"><li>Bevásárlás kérése vagy vállalása</li><li>Fűnyírás, gyógyszerkiváltás</li><li>Rendszeres segítők listája</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Értékelés mindenütt</h4><p>Ajánlás/reputáció, ami a kölcsönt és a segítséget biztonságossá teszi.</p><ul class="feat"><li>Csillagozd a kölcsönadót</li><li>Írj ajánlást</li><li>Nézd meg valaki hírnevét</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+      </div>
+    </div>
+
+    <!-- P3 -->
+    <div class="pillar">
+      <div class="pillar-head"><div class="pillar-num">3</div><div>
+        <div class="role">A fenntarthatóság · B réteg</div><h3>Körforgás</h3>
+        <p>Ami az egyiknek felesleg, a másiknak kincs. Könnyű belépő, magától pörög, jól kommunikálható.</p></div></div>
+      <div class="ideas">
+        <div class="idea"><h4>„Ingyen elvihető”</h4><p>Kirakod a felesleget, aki akarja, elviszi — térképes pinnel. A te ötleted.</p><ul class="feat"><li>Rakd fel a feleslegedet fotóval</li><li>Jelöld, ha elvitték — lekerül</li><li>Térképen mi van a közelben</li><li>A profilodon látod a feltöltéseid</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Gyerekruha-körforgás</h4><p>Gyorsan kinövik — csere-bere szülők közt, magától menne.</p><ul class="feat"><li>Böngéssz méret szerint</li><li>Add tovább a kinőttet</li><li>Csere-kérés indítása</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Mag- és palántacsere</h4><p>A félig kertvárosi Kozármislenynek testre szabva.</p><ul class="feat"><li>Kínáld a felesleg magot</li><li>Keress fajtát</li><li>Szezonális csereblokk</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Könyvcsere-polc</h4><p>Digitális párja a fizikai cserepolcnak.</p><ul class="feat"><li>Nézd, mi elérhető</li><li>Ajánld fel a sajátod</li><li>Foglald le, amit kérsz</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Javító-kávézó (repair café)</h4><p>Esemény, ahol megjavítják a tönkrement holmit — közösségi alkalom.</p><ul class="feat"><li>Következő alkalom dátuma</li><li>Jelentkezz javításra vagy segítőnek</li><li>Mit érdemes vinni</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+      </div>
+    </div>
+
+    <!-- P4 money -->
+    <div class="pillar money">
+      <div class="pillar-head"><div class="pillar-num">4</div><div>
+        <div class="role">A bevétel · B réteg</div><h3>Helyi piac &amp; szolgáltatás</h3>
+        <p>Ahol tranzakció van, ott van pénz. Ez a pillér tartja el a többit — minden eleme közvetlen üzleti lehetőség neked.</p></div></div>
+      <div class="ideas">
+        <div class="idea star"><h4>Kistermelő — „mini webshop light”</h4><p>Regisztráció, termékbemutató, mini készlet, kiszállítás, előjelentkezés termékre.</p><ul class="feat"><li>Böngészd a heti kínálatot</li><li>Rendelj vagy előjegyezz</li><li>Kérj kiszállítást vagy vedd át ponton</li><li>Termelőként: vidd fel a készleted</li></ul><div class="chips"><span class="chip rev">Bevétel</span></div><div class="biz">💰 Tranzakciós jutalék (5–10%) vagy termelői előfizetés + kiemelt hirdetés.</div></div>
+        <div class="idea star"><h4>Időpontfoglaló</h4><p>Fodrász, műkörmös, masszőr beállítja a szabad időpontjait; a vevő foglal.</p><ul class="feat"><li>Válassz szabad időpontot</li><li>Kapj emlékeztetőt</li><li>Mondd le vagy módosítsd</li><li>Szolgáltatóként: kezeld a naptárad</li></ul><div class="chips"><span class="chip rev">Bevétel</span></div><div class="biz">💰 Havidíjas SaaS a szolgáltatónak (munkát spórol) + kiemelés.</div></div>
+        <div class="idea star"><h4>Helyi kedvezmény / kupon</h4><p>A kereskedő maga készít kupont; a vevő felmutatja a QR-t, a bolt beolvassa. Csalásbiztos.</p><ul class="feat"><li>Nézd a helyi kuponokat</li><li>Aktiváld, mutasd a QR-t</li><li>Kereskedőként: készíts kupont, olvass be</li></ul><div class="chips"><span class="chip rev">Bevétel</span></div><div class="biz">💰 Kereskedői előfizetés a kupon-modulra + beváltási statisztika.</div></div>
+        <div class="idea"><h4>Szolgáltató-piactér + ajánlatkérés</h4><p>Mester-katalógus értékeléssel; „kérek 3 ajánlatot burkolásra” gomb.</p><ul class="feat"><li>Keress mestert értékelés alapján</li><li>Kérj 3 ajánlatot egy gombbal</li><li>Írj véleményt a munkáról</li></ul><div class="chips"><span class="chip rev">Bevétel</span></div><div class="biz">💰 A mesterek a lead-ért fizetnek (Árukereső-modell).</div></div>
+        <div class="idea"><h4>Strukturált apró</h4><p>Kategóriázott, kereshető, lejáró — mentett kereséssel és értesítéssel.</p><ul class="feat"><li>Adj fel hirdetést fotóval</li><li>Ments el keresést + kapj értesítést</li><li>Szűrj kategóriára és árra</li></ul><div class="chips"><span class="chip rev">Bevétel</span></div><div class="biz">💰 Kiemelés, „sürgős” jelvény, üzleti eladók előfizetése.</div></div>
+        <div class="idea"><h4>Állatorvos</h4><p>Regisztráció, rendelés + ügyelet, oltás/chip-emlékeztető, időpontfoglalással.</p><ul class="feat"><li>Foglalj rendelési időpontot</li><li>Nézd az ügyeletet</li><li>Oltás- és chip-emlékeztető</li></ul><div class="chips"><span class="chip rev">Bevétel</span></div><div class="biz">💰 Állatorvosi/petshop előfizetés + foglalási modul.</div></div>
+        <div class="idea"><h4>Állás &amp; diákmunka</h4><p>Helyi és alkalmi munka, diákmunka külön szűrővel.</p><ul class="feat"><li>Böngészd a helyi állásokat</li><li>Szűrj diákmunkára</li><li>Adj fel álláshirdetést</li></ul><div class="chips"><span class="chip rev">Bevétel</span></div><div class="biz">💰 Kiemelt hirdetés.</div></div>
+        <div class="idea"><h4>Ingatlan / albérlet</h4><p>Helyi kiadó/eladó, szoba — szűrhetően, az agglomerációs keresletre.</p><ul class="feat"><li>Keress kiadó/eladó ingatlant</li><li>Szűrj típusra és árra</li><li>Hirdesd a sajátod</li></ul><div class="chips"><span class="chip rev">Bevétel</span></div><div class="biz">💰 Kiemelés + ingatlanos-előfizetés.</div></div>
+      </div>
+    </div>
+
+    <!-- P5 -->
+    <div class="pillar">
+      <div class="pillar-head"><div class="pillar-num">5</div><div>
+        <div class="role">A közösség · B réteg</div><h3>Együtt — szervezés &amp; részvétel</h3>
+        <p>Amit közösen csinálunk, és amivel a városra hatunk. Alulról jövő szervezés, moderálva.</p></div></div>
+      <div class="ideas">
+        <div class="idea"><h4>Rendezvény-ötletfal + jelentkezés</h4><p>Bárki javasol (falunap, főzőverseny, ruhavásár), a szervező megadja a keresett létszámot.</p><ul class="feat"><li>Javasolj programot</li><li>Szavazz mások ötletére</li><li>Jelentkezz a keresett létszámba</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Esemény + jegy/regisztráció</h4><p>Létszámkorlátos regisztráció vagy jegyeladás (borvacsora, workshop).</p><ul class="feat"><li>Foglalj helyet vagy végy jegyet</li><li>Létszámkorlát automatikusan</li><li>Emlékeztető az eseményről</li></ul><div class="chips"><span class="chip rev">Bevétel</span></div><div class="biz">💰 Jegyenkénti szervizdíj (~+150 Ft / %).</div></div>
+        <div class="idea"><h4>„Új lakó vagyok” csomag</h4><p>Beköltözőknek: mit hol intézz, hulladék, orvos, iskola, közösség.</p><ul class="feat"><li>Első heti checklist</li><li>Intéznivalók sorrendben</li><li>Helyi ajánlások térképpel</li></ul><div class="chips"><span class="chip new">Kiemelt</span></div><div class="biz">💰 A beköltöző a legértékesebb lead — fizetett helyi ajánlások (bolt, fodrász).</div></div>
+        <div class="idea"><h4>Elveszett–megtalált</h4><p>Kutya, macska, tárgy — fotóval, térképpel, strukturáltan.</p><ul class="feat"><li>Jelezd, mit vesztettél/találtál</li><li>Térképen az utolsó hely</li><li>Értesítés egyezéskor</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Moderált üzenőfal</h4><p>Közösségi hírfolyam előzetes jóváhagyással — chat kockázata nélkül.</p><ul class="feat"><li>Posztolj (jóváhagyás után)</li><li>Böngéssz témák szerint</li><li>Jelentsd a szabálysértőt</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Hibabejelentő</h4><p>Kátyú, közvilágítás, illegális szemét — fotóval, státuszkövetéssel.</p><ul class="feat"><li>Fotózd és jelentsd a hibát</li><li>Kövesd a megoldás státuszát</li><li>Lásd a térképen a bejelentéseket</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Kérdőív &amp; szavazás</h4><p>„Mit szeretne a lakosság?” — közösségi vélemény, amit a hivatal is használhat.</p><ul class="feat"><li>Szavazz aktuális kérdésre</li><li>Nézd az eredményt élőben</li><li>Javasolj új témát</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+        <div class="idea"><h4>Egyesületek + „Régi Misleny”</h4><p>Civil jegyzék és közös helytörténeti fotóarchívum.</p><ul class="feat"><li>Találd meg a klubod, egyesületed</li><li>Tölts fel régi fotót</li><li>Böngészd a helytörténeti archívumot</li></ul><div class="chips"><span class="chip trust">Bizalom</span></div></div>
+      </div>
+    </div>
+
+    <!-- P6 -->
+    <div class="pillar">
+      <div class="pillar-head"><div class="pillar-num">6</div><div>
+        <div class="role">Az elköteleződés · A/B réteg</div><h3>Szórakozás &amp; játék</h3>
+        <p>A fun, ami visszahoz — játék és helyi tartalom. Elsősorban retention (nem közvetlen bevétel), de a nyereményjátékokon és szezonális kampányokon át üzletileg is hasznos.</p></div></div>
+      <div class="ideas">
+        <div class="idea"><h4>Napi helyi játék („Mislenyle”)</h4><p>Napi kvíz vagy szókereső a városról, ranglistával.</p><ul class="feat"><li>Napi új feladvány</li><li>Sorozat és ranglista</li><li>Oszd meg az eredményed</li></ul><div class="chips"><span class="chip fun">Fun</span></div></div>
+        <div class="idea"><h4>Városfelfedező (QR / geoláda)</h4><p>QR-kódos pontok a városban, összegyűjthető jelvényekkel.</p><ul class="feat"><li>Fedezz fel rejtett pontokat</li><li>Gyűjts jelvényt</li><li>Kihívások barátokkal</li></ul><div class="chips"><span class="chip fun">Fun</span></div></div>
+        <div class="idea"><h4>„Ezen a napon”</h4><p>Napi helytörténeti érdekesség és régi fotó.</p><ul class="feat"><li>Napi kis sztori a városról</li><li>Régi fotó ugyanarról a helyről</li><li>Oszd meg, kommenteld</li></ul><div class="chips"><span class="chip fun">Fun</span></div></div>
+        <div class="idea"><h4>Hét fotója</h4><p>Közösségi fotópályázat szavazással.</p><ul class="feat"><li>Töltsd fel a fotód</li><li>Szavazz a kedvencedre</li><li>Havi nyertes-galéria</li></ul><div class="chips"><span class="chip fun">Fun</span></div></div>
+        <div class="idea"><h4>Helyi tehetségek fala</h4><p>Zene, videó, vers, kézműves — moderált bemutatkozó fal.</p><ul class="feat"><li>Mutasd meg, amit alkotsz</li><li>Böngészd a helyi tehetségeket</li><li>Támogasd egy lájkkal</li></ul><div class="chips"><span class="chip fun">Fun</span></div></div>
+        <div class="idea"><h4>Receptsarok</h4><p>„Ki mit főz” — helyi receptek gyűjteménye.</p><ul class="feat"><li>Oszd meg a receptedet</li><li>Keress fogást</li><li>Szezonális ajánlók</li></ul><div class="chips"><span class="chip fun">Fun</span></div></div>
+        <div class="idea"><h4>Toplisták / szavazós játék</h4><p>„A város legjobb péksége / kilátója” — közösségi toplisták.</p><ul class="feat"><li>Szavazz a kategóriákban</li><li>Nézd az élő toplistát</li><li>Javasolj új kérdést</li></ul><div class="chips"><span class="chip fun">Fun</span></div></div>
+        <div class="idea star"><h4>Nyereményjáték helyi boltokkal</h4><p>Szponzorált játék: tölts ki, nyerj a helyi cukrászdában.</p><ul class="feat"><li>Játssz a nyereményért</li><li>A boltok adják a díjat</li><li>Marketing a vállalkozónak</li></ul><div class="chips"><span class="chip fun">Fun</span><span class="chip rev">Bevétel</span></div><div class="biz">💰 A helyi vállalkozó szponzorálja — fizetett elérés és új vevők.</div></div>
+        <div class="idea star"><h4>Adventi kalendárium</h4><p>Napi meglepetés vagy kupon helyi boltoktól, szezonálisan.</p><ul class="feat"><li>Nyiss ki egy ablakot naponta</li><li>Kuponok, mini-nyeremények</li><li>Húsvéti tojáskeresés is</li></ul><div class="chips"><span class="chip fun">Fun</span><span class="chip rev">Bevétel</span></div><div class="biz">💰 A kupon-modulra épül — szezonális kampány a kereskedőknek.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TÉMÁK -->
+  <section id="temak">
+    <p class="eyebrow">05 — Átfogó nézetek</p>
+    <h2>Állatok &amp; gyerekek — nem sziget, hanem szűrő</h2>
+    <p class="lede">Ez a két téma <b>átível mind az öt pilléren</b>. Ezért nem külön modulként, hanem nézetként/szűrőként érdemes kezelni őket — így minden kapcsolódó funkció egy helyen látszik.</p>
+    <div class="views">
+      <div class="view"><h4>🐾 Állatok</h4><p class="i">Egy szűrő, ami összehozza:</p>
+        <ul>
+          <li>Gazdikereső — örökbefogadható helyi állatok</li>
+          <li>Állatorvos + ügyelet, oltás-emlékeztető</li>
+          <li>Kutyabarát helyek, futtatók a térképen</li>
+          <li>Állatmegőrzés / sétáltatás-börze (szívesség)</li>
+          <li>Elveszett–megtalált állat</li>
+          <li>Kistermelői tojás, méz, hús</li>
+        </ul></div>
+      <div class="view"><h4>👶 Gyerekek</h4><p class="i">Egy szűrő, ami összehozza:</p>
+        <ul>
+          <li>Gyerekprogram-naptár, nyári táborok</li>
+          <li>Bölcsi/ovi/suli: menza, szünetek, beiratkozás</li>
+          <li>Bébiszitter- és felügyelet-börze</li>
+          <li>Suliba-fuvarozás (carpool)</li>
+          <li>Gyerekruha- és játékcsere (körforgás)</li>
+          <li>Korrepetálás- és tanulócsoport-börze</li>
+        </ul></div>
+    </div>
+  </section>
+
+  <!-- FIATAL -->
+  <section id="fiatal">
+    <p class="eyebrow">06 — Ifjúsági fókusz</p>
+    <h2>Amivel a fiatalokat is behozod</h2>
+    <p class="lede">A hivatali appok a felnőttekre céloznak; a fiatalok sehol — pedig ők a legaktívabb online réteg. Egy külön sáv nekik valódi különbség.</p>
+    <div class="youth-grid">
+      <div class="ychip"><h4>„Mi lesz a hétvégén?”</h4><p>Korosztályra szűrt esemény-feed: bulik, meccsek, meetupok.</p></div>
+      <div class="ychip"><h4>Diákmunka-börze</h4><p>Nyári és alkalmi munka helyben.</p></div>
+      <div class="ychip"><h4>Korrepetálás-börze</h4><p>Diák diáknak — matek, angol, zene.</p></div>
+      <div class="ychip"><h4>Fuvarmegosztás Pécsre</h4><p>Suli, egyetem, munka — carpool.</p></div>
+      <div class="ychip"><h4>Városfelfedező játék</h4><p>QR-pontok, „geoládák”, jelvények — gamifikáció.</p></div>
+      <div class="ychip"><h4>Heti kvíz &amp; ranglista</h4><p>Kvíz a városról, kihívások, pontverseny.</p></div>
+      <div class="ychip"><h4>Kreatív fal</h4><p>Moderált fotó-/mémpályázat, helyi tehetségek.</p></div>
+      <div class="ychip"><h4>Klubok &amp; szakkörök</h4><p>Zene, tánc, e-sport, robotika — mi hol van.</p></div>
+    </div>
+  </section>
+
+  <!-- MOTOR -->
+  <section id="motor">
+    <p class="eyebrow">07 — A termék magja</p>
+    <h2>A „kínálati motor” — nem 10 dolgot építesz, hanem 1-et</h2>
+    <p class="lede">A bevételes ötletek titka, hogy <b>ugyanaz a motor hajtja őket</b>. Aki kínál valamit — termelő, mester, bolt, állatorvos, eszköz-tulajdonos — ugyanarra a sínre kerül:</p>
+    <div class="motor">
+      <div class="flow">
+        <div class="node"><div class="t">1. Szereplő</div><div class="m">Regisztrál</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="t">2. Kínálat</div><div class="m">Profil / katalógus</div></div>
+        <div class="arrow">→</div>
+        <div class="node tri"><div class="t">3. Tranzakció</div><div class="m">Egy a háromból</div>
+          <div class="three"><span>· Rendelés (termék)</span><span>· Foglalás (időpont)</span><span>· Beváltás (kupon)</span></div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="t">4. Bizalom</div><div class="m">Értékelés</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="t">5. Visszahozás</div><div class="m">Emlékeztető</div></div>
+      </div>
+      <div class="motor-tablewrap">
+        <table>
+          <thead><tr><th>Ki regisztrál</th><th>Mit tesz közzé</th><th>Tranzakció</th><th>Bizalom</th></tr></thead>
+          <tbody>
+            <tr><td><span class="name">Kistermelő</span></td><td>termék + készlet</td><td>Rendelés</td><td>értékelés</td></tr>
+            <tr><td><span class="name">Fodrász / műkörmös</span></td><td>szabad időpontok</td><td>Foglalás</td><td>értékelés</td></tr>
+            <tr><td><span class="name">Kereskedő</span></td><td>kupon</td><td>Beváltás</td><td>értékelés</td></tr>
+            <tr><td><span class="name">Állatorvos</span></td><td>rendelés + ügyelet</td><td>Foglalás</td><td>értékelés</td></tr>
+            <tr><td><span class="name">Eszköz-tulajdonos</span></td><td>szabad eszköz</td><td>Foglalás (kölcsön)</td><td>értékelés</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="motor-note"><b>Miért fontos ez?</b> Egy motor, nem tíz külön funkció → <b>olcsóbb fejlesztés</b>. És mivel a motor városfüggetlen → <b>eladható más településeknek</b>. A Szerszámoskamra, Időbank, Gazdikereső a köré épülő bizalmi réteg: a horog és a ragasztó, amire a fizetős modulok támaszkodnak.</div>
+      <div class="motor-note" style="background:var(--amber-soft)"><b>És mindenkinek van profilja — „az én oldalam”.</b> Nem csak a termelőnek vagy a mesternek: minden lakónak. Egy helyen mutatja, amit feltöltöttél (ingyen elvihető cuccok, apró, kölcsönadott eszköz), azok <b>státuszát</b> (elérhető / elvitték / lejárt), a foglalásaidat, mentett kereséseidet és emlékeztetőidet. Az <b>értékelések</b> is ehhez a profilhoz kötődnek — ez adja a bizalmat. Tehát igen: az „ingyen elvihető" feltöltései a saját profilodon jelennek meg, ahol egy kattintással jelölöd, ha elvitték.</div>
+    </div>
+  </section>
+
+  <!-- ÜZLET -->
+  <section id="uzlet">
+    <p class="eyebrow">08 — Neked, mint készítőnek</p>
+    <h2>Hol van benne üzlet?</h2>
+    <p class="lede">Egy ~6 900 fős városban a valódi pénz oda koncentrálódik, ahol <b>tranzakció</b> van, nem ahol csak hirdetés. Fontossági sorrendben:</p>
+    <div class="rev-list">
+      <div class="rev-item strong"><span class="num"></span><div><h4>Kistermelői jutalék</h4><p>5–10% a leadott rendelésekből. A termelő fizet, mert eladást hozol neki — valódi, ismétlődő pénzforgalom.</p><div class="scale">% / rendelés</div></div><span class="strength hi">Erős</span></div>
+      <div class="rev-item strong"><span class="num"></span><div><h4>Szolgáltató lead-gen</h4><p>A mesterek az ajánlatkérésekért (lead) fizetnek. Egy ügyfélcsatorna sokat ér egy helyi szakinak.</p><div class="scale">Ft / lead</div></div><span class="strength hi">Erős</span></div>
+      <div class="rev-item strong"><span class="num"></span><div><h4>Foglalás- és kupon-SaaS</h4><p>Havidíj a fodrásznak/boltnak a foglaló- ill. hűség-modulért. Kiszámítható, ismétlődő bevétel.</p><div class="scale">Ft / hó / vállalkozás</div></div><span class="strength hi">Erős</span></div>
+      <div class="rev-item"><span class="num"></span><div><h4>Kiemelt hirdetés &amp; jegydíj</h4><p>Apró/jegyzék kiemelés, esemény-jegyek szervizdíja.</p><div class="scale">tranzakciónkénti mikrodíj</div></div><span class="strength mid">Közepes</span></div>
+      <div class="rev-item"><span class="num"></span><div><h4>Szponzoráció</h4><p>A legnézettebb kártyák mellé helyi szponzorblokk — a dashboard „közmű”.</p><div class="scale">havi szponzori csomag</div></div><span class="strength mid">Közepes</span></div>
+      <div class="rev-item"><span class="num"></span><div><h4>Önkormányzati üzemeltetés</h4><p>Ha a hivatal hivatalos csatornaként használja, fizethet az üzemeltetésért — lehet a legnagyobb egyösszegű tétel.</p><div class="scale">éves szolgáltatási díj</div></div><span class="strength mid">Közepes</span></div>
+    </div>
+    <p class="footnote">A közösségi/bizalmi funkciók (Szerszámoskamra, Időbank, Gazdikereső, körforgás) nem közvetlen bevétel — ezek hozzák és tartják bent az embereket, akikre a fenti fizetős modulok épülnek. Ne akard ezeket közvetlenül pénzzé tenni.</p>
+  </section>
+
+  <!-- TERJESZKEDÉS -->
+  <section id="terjeszkedes">
+    <p class="eyebrow">09 — A távlati tét</p>
+    <h2>Kiterjeszthető más településekre</h2>
+    <div class="expand">
+      <p class="eyebrow">White-label / SaaS</p>
+      <h3>A helyi bevétel bizonyítja a koncepciót — a skála a replikációban van</h3>
+      <p>Mivel a „kínálati motor” <b>városfüggetlen</b>, ha egyszer működik Kozármislenyen, ugyanaz a rendszer más kisvárosoknak is eladható — saját arculattal, saját adatforrásokkal. Nem újraépíted, csak beállítod.</p>
+      <p>Egy 6 300 fős város önmagában korlátoz. De Magyarországon több száz hasonló méretű település van, ugyanezekkel a problémákkal (hulladéknaptár, helyi piac, közösség). Ott már nem egy város × szerény bevétel, hanem <b>sok város × ismétlődő díj</b> a képlet.</p>
+      <div class="math">
+        <div><div class="n">~2 800</div><div class="l">település Magyarországon 5–10e fő alatt</div></div>
+        <div><div class="n">300</div><div class="l">előfizető település már komoly, önfenntartó üzlet</div></div>
+        <div><div class="n">1×</div><div class="l">motor, amit egyszer építesz meg</div></div>
+      </div>
+      <p style="margin-top:16px">Ez egyben a <b>kockázat-megosztás</b> is: Kozármisleny az „élő demó”, amivel a modellt validálod, mielőtt bárhová terjesztenéd.</p>
+    </div>
+  </section>
+
+  <!-- LÉTEZIK -->
+  <section id="letezik">
+    <p class="eyebrow">10 — Piackutatás</p>
+    <h2>Létezik-e már ilyen?</h2>
+    <p class="lede">Sok a <em>felülről vezérelt hivatali app</em> és az <em>országos apróhirdető</em> — de alulról építkező, közösségi, élő-adatot aggregáló, tranzakciós oldal Kozármislenyre nincs.</p>
+    <div class="motor-tablewrap">
+      <table>
+        <thead><tr><th>Megoldás</th><th>Mi ez</th><th>Amit lefed</th><th>Amit NEM fed le</th></tr></thead>
+        <tbody>
+          <tr><td><span class="name">Munipolis</span></td><td>Hivatali értesítő app — <b>Kozármislenyen aktívan használt</b></td><td class="has">Hírek, push, vészjelzés, hibabejelentés, szavazás</td><td class="gap">Piac, tranzakció, aggregált élő adat, közösségi UGC, fiatalok</td></tr>
+          <tr><td><span class="name">Városi App / SMART Önk. / Okosváros</span></td><td>Önkormányzatnak eladott márkázott appok</td><td class="has">Hírek, okostérkép, hibabejelentő, közmű, parkolás, városkártya</td><td class="gap">Alulról építkező közösség, kistermelői piac, szívesség, ifjúság</td></tr>
+          <tr><td><span class="name">kozarmisleny.hu / misleny.hu</span></td><td>Hivatalos portál és független híroldal</td><td class="has">Hírek, dokumentumok</td><td class="gap">Interakció, emlékeztető, piac, tranzakció, személyre szabás</td></tr>
+          <tr><td><span class="name">Facebook-csoport</span></td><td>Apró és közösségi beszélgetés</td><td class="has">Apró, gyors kérdés, elérés</td><td class="gap">Kereshetőség, bizalom/értékelés, tranzakció, értesítés, archívum</td></tr>
+          <tr><td><span class="name">Jófogás / Maxapró</span></td><td>Országos apróhirdető</td><td class="has">Használt cikk adok-veszek</td><td class="gap">Helyi fókusz, közösség, szolgáltatás, minden más</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="footnote">Kozármisleny ma <b>élő</b> hivatalos csatornái: önkormányzati weboldal, Munipolis (aktív), Facebook, YouTube. A korábbi „Misleny App” a Google Play-ből eltűnt (a listázás 404-et ad) és a hivatal sem promotálja — vélhetően megszűnt vagy sosem terjedt el. Nemzetközi inspiráció a formátumra: CityDashboard (London), Morrisville és Cambridge nyílt-adat portáljai — de ezek transzparencia-dashboardok, nem közösségi, tranzakciós platformok.</p>
+  </section>
+
+  <!-- DÖNTÉS -->
+  <section id="dontes">
+    <p class="eyebrow">11 — A mérleg</p>
+    <h2>Érdemes-e nekivágni?</h2>
+    <p class="lede">Röviden: <b>egy olcsó, gyors MVP-t igen — érdemes kipróbálni.</b> Itt az őszinte mérleg és a javasolt út.</p>
+    <div class="verdict">
+      <div class="cols">
+        <div class="col pro"><h4>Mellette szól</h4><ul>
+          <li>Valódi rés: a Munipolis/weboldal és a FB közt a piac–szolgáltatás–szívesség senkinél</li>
+          <li>Az induló (A) réteg olcsó, statikus, gyorsan kész</li>
+          <li>A horog (kuka-emlékeztető) valós, saját fájdalompontból jön</li>
+          <li>A bevétel a tranzakcióban van, nem a bizonytalan hirdetésben</li>
+          <li>Egy motor → olcsó build és kész a white-label sztori</li>
+          <li>A távlati tét (más települések) valódi növekedést ad</li>
+        </ul></div>
+        <div class="col con"><h4>Ellene / kockázat</h4><ul>
+          <li>6 300 fő korlátozza a helyi bevételt — a skála a replikáció</li>
+          <li>Közösségi platform: „hidegindítás” — kritikus tömeg kell</li>
+          <li>A B réteg moderációt és GDPR-megfelelést igényel</li>
+          <li>A kisvárosi adoptáció nehéz — a korábbi „Misleny App” láthatóan nem terjedt el (eltűnt a Play Store-ból), a Munipolisnak is szűk a mindshare-je</li>
+          <li>Közösségiként, nem „hivatalosként” kell pozicionálni — a hivatali funkciókban (hír, hibabejelentő) a Munipolis a beágyazott</li>
+          <li>Az adatok frissen tartása folyamatos munka</li>
+        </ul></div>
+      </div>
+      <div class="call"><h4>Az ajánlott út</h4>
+        <p><b>Ne akard egyszerre.</b> Építsd fázisokban: előbb az olcsó A réteg + a horog hozza a közönséget és a bizalmat, aztán jön rá egyetlen tranzakciós modul, hogy validáld a fizetési hajlandóságot — és csak működő modell után gondolkodj a terjeszkedésen.</p></div>
+    </div>
+    <div class="phases">
+      <div class="phase"><div class="n"></div><h4>Bizonyíts</h4><p>Statikus dashboard: idő, hulladék + kuka-emlékeztető, áramszünet, sport, POI, gyógyszertár.</p><div class="out">Cél: forgalom + bizalom · olcsó, gyors</div></div>
+      <div class="phase"><div class="n"></div><h4>Keress pénzt</h4><p>Egy tranzakciós modul élesben: kistermelői piac VAGY kupon/kedvezmény. Backend + moderáció belép.</p><div class="out">Cél: első bevétel + fizetési hajlandóság</div></div>
+      <div class="phase"><div class="n"></div><h4>Mélyíts</h4><p>Foglalás, szolgáltató-piactér, szívesség/eszköztár, közösségi funkciók a motorra építve.</p><div class="out">Cél: napi aktív közösség</div></div>
+      <div class="phase"><div class="n"></div><h4>Terjeszkedj</h4><p>A validált motort white-label csomagként más településeknek.</p><div class="out">Cél: skálázódó, ismétlődő bevétel</div></div>
+    </div>
+  </section>
+
+  <div class="sources">
+    <h3>Források</h3>
+    <ul>
+      <li><a href="https://delkom.hu/letoltes/hulladeknaptar/Kozarmisleny.pdf">Dél-Kom — Kozármisleny hulladéknaptár (PDF, gépileg olvasható)</a></li>
+      <li><a href="https://www.kozarmisleny.hu/hirek">kozarmisleny.hu — hivatalos portál</a></li>
+      <li><a href="https://misleny.hu/">misleny.hu — független helyi híroldal</a></li>
+      <li><a href="https://www.eon.hu/hu/rolunk/sajtoszoba/sajtokozlemenyek/tervezett-uzemszunet-terkep.html">E.ON — tervezett áram-/gázszünet térkép</a></li>
+      <li><a href="https://www.eredmenyek.com/csapat/kozarmisleny/Yik4F60k/">eredmenyek.com — HR-RENT Kozármisleny</a></li>
+      <li><a href="https://info.munipolis.hu/">Munipolis</a> · <a href="https://varosiapp.hu/">Városi Applikáció</a> · <a href="https://appentum.hu/okosvaros/">Appentum Okosváros</a></li>
+      <li><a href="https://open-meteo.com/">Open-Meteo — ingyenes idő- és levegő-API</a></li>
+    </ul>
+    <p class="footnote">MislenyDash — jövőkép, döntés-előkészítő munkaanyag · 2026. 07. 18. A számok (települések, jutalékok) nagyságrendi becslések, üzleti tervben pontosítandók.</p>
+  </div>
+
+</div></div>

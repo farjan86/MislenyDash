@@ -1,0 +1,540 @@
+/* ============================================================
+   MislenyDash — design rendszer
+   Meleg papír + mélyzöld + borostyán · Georgia display + mono adat.
+   ============================================================ */
+:root{
+  --paper:#f2f0e6; --paper-2:#eae7db; --card:#fffdf8; --ink:#19221c; --ink-soft:#535d57;
+  --line:rgba(25,34,28,.11); --line-strong:rgba(25,34,28,.2);
+  --green:#23503f; --green-d:#1c4132; --green-soft:#e2ebe6;
+  --amber:#b07a1c; --amber-soft:#f4e8ce;
+  --brick:#98492e; --brick-soft:#efdfd7;
+  --blue:#2b3a6b; --blue-soft:#dde2f2;
+  --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"Cascadia Code","SF Mono",Consolas,monospace;
+  --wrap:1600px;
+  --shadow:0 1px 2px rgba(25,34,28,.05), 0 10px 30px -18px rgba(25,34,28,.28);
+  --shadow-hi:0 2px 4px rgba(25,34,28,.06), 0 18px 40px -20px rgba(25,34,28,.4);
+}
+*{box-sizing:border-box; margin:0; padding:0}
+body{background:var(--paper); color:var(--ink); font-family:var(--sans);
+  line-height:1.6; font-size:16.5px; -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  background-image:radial-gradient(circle at 12% -5%, rgba(35,80,63,.05), transparent 40%);}
+html{scroll-behavior:smooth}
+.page{padding:0 0 120px}
+.wrap{max-width:var(--wrap); margin:0 auto; padding:0 20px}
+a{color:var(--green); text-underline-offset:3px}
+h1,h2,h3,h4{font-family:var(--serif); line-height:1.12; text-wrap:balance; margin:0}
+p{margin:0}
+em{font-style:italic}
+:focus-visible{outline:2px solid var(--amber); outline-offset:2px; border-radius:3px}
+
+/* ---------- ragadós navigációs sáv (nem tartalom) ---------- */
+.qbar{position:sticky; top:0; z-index:30;
+  background:linear-gradient(180deg,var(--green-d),#173629);
+  border-bottom:1px solid rgba(255,255,255,.09);
+  box-shadow:0 8px 22px -14px rgba(25,34,28,.55)}
+.qbar-inner{display:flex; align-items:center; gap:18px; height:56px}
+.qbar-brand{flex-shrink:0; font-family:var(--serif); font-weight:700; font-size:17px;
+  letter-spacing:-.01em; color:#f2f0e6; text-decoration:none}
+.qbar-brand:hover{color:#fff}
+.qbar-links{display:flex; align-items:center; gap:3px; margin-left:auto;
+  overflow-x:auto; scrollbar-width:none}
+.qbar-links::-webkit-scrollbar{display:none}
+.qbar-link{display:inline-flex; align-items:center; gap:7px; padding:8px 12px;
+  border-radius:8px; white-space:nowrap; text-decoration:none; font-size:14px;
+  font-weight:600; color:rgba(242,240,230,.82); transition:background .12s, color .12s}
+.qbar-link:hover{background:rgba(255,255,255,.1); color:#fff}
+.qbar-link.on{background:rgba(255,255,255,.15); color:#fff}
+.qbar-ico{font-size:16px; line-height:1}
+@media(max-width:640px){
+  .qbar-inner{gap:10px; height:52px}
+  .qbar-brand{display:none}
+  .qbar-links{margin-left:0}
+}
+
+/* ---------- masthead ---------- */
+.masthead{padding:52px 0 26px}
+.kicker{font-family:var(--mono); font-size:12px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--amber); margin:0 0 14px; font-weight:600}
+.masthead h1{font-size:clamp(40px,7vw,72px); font-weight:700; letter-spacing:-.02em;
+  background:linear-gradient(120deg,var(--green-d),var(--green) 60%,#3a6b53);
+  -webkit-background-clip:text; background-clip:text; color:transparent}
+.masthead .sub{font-size:clamp(17px,2.2vw,20px); color:var(--ink-soft);
+  margin-top:14px; max-width:60ch; font-family:var(--serif); font-style:italic;
+  overflow-wrap:break-word}
+
+/* ---------- élő "ma" csík (a hero) ---------- */
+.ribbon{margin-top:24px; min-height:46px; display:flex; flex-wrap:wrap; align-items:stretch;
+  gap:1px; background:var(--line); border:1px solid var(--line); border-radius:9px;
+  overflow:hidden; box-shadow:var(--shadow)}
+.rb-cell{background:var(--card); padding:12px 18px; display:flex; align-items:center; gap:8px;
+  font-family:var(--mono); font-size:13px; color:var(--ink-soft)}
+.rb-date{font-weight:600; color:var(--ink); text-transform:capitalize;
+  background:linear-gradient(180deg,#eef1eb,#e7ece6)}
+.rb-date::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--green);
+  box-shadow:0 0 0 3px rgba(35,80,63,.18); animation:pulse 2.4s ease-in-out infinite}
+.rb-waste{flex:1}
+.rb-waste b{color:var(--ink); font-weight:600}
+.rb-ico{font-size:16px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ---------- szekciók ---------- */
+.zone{margin-top:44px; scroll-margin-top:66px}
+.zone-head{display:flex; align-items:baseline; gap:14px; margin-bottom:18px;
+  padding-bottom:12px; border-bottom:2px solid var(--ink)}
+.zone-eyebrow{font-family:var(--mono); font-size:11.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--amber); font-weight:700}
+.zone-title{font-size:clamp(22px,3.2vw,30px); font-weight:700; letter-spacing:-.01em}
+
+/* ---------- masonry kártyarács ---------- */
+.dash.grid{display:grid; grid-template-columns:1fr; gap:18px; align-items:start}
+.dash.grid>.card{margin-bottom:0}
+@media(min-width:640px){ .dash.grid{grid-template-columns:repeat(2,1fr)} }
+@media(min-width:1080px){ .dash.grid{grid-template-columns:repeat(3,1fr)} }
+.dash.duo{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+  gap:18px; align-items:start}
+.dash.solo{display:block}
+.dash.duo>.card,.dash.solo>.card{margin-bottom:0}
+.card{break-inside:avoid; margin:0 0 18px; background:var(--card);
+  border:1px solid var(--line); border-radius:11px; padding:22px 22px 20px;
+  box-shadow:var(--shadow); position:relative; overflow:hidden;
+  transition:transform .18s ease, box-shadow .18s ease}
+.card::before{content:""; position:absolute; inset:0 0 auto 0; height:3px; background:var(--green)}
+.card.accent-amber::before{background:var(--amber)}
+.card.accent-brick::before{background:var(--brick)}
+.card.accent-blue::before{background:var(--blue)}
+.card.accent-ink::before{background:var(--ink)}
+@media (hover:hover){ .card:hover{transform:translateY(-2px); box-shadow:var(--shadow-hi)} }
+
+.card-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px}
+.card-head .title{display:flex; align-items:center; gap:10px}
+.card-head .ico{font-size:22px; line-height:1}
+.card-head h3{font-size:20px; font-weight:700}
+.card .updated{font-family:var(--mono); font-size:10px; color:var(--ink-soft);
+  letter-spacing:.04em; white-space:nowrap; text-transform:uppercase}
+.card .state{font-family:var(--mono); font-size:13px; color:var(--ink-soft); padding:6px 0}
+.card .state.err{color:var(--brick)}
+
+/* ---------- meteorológiai riasztás ---------- */
+.dash.solo + .wx-panel{margin-top:18px}
+.wa-list{display:flex; flex-direction:column; gap:10px}
+.wa-item{border:1px solid var(--line); border-left-width:4px; border-radius:8px;
+  padding:10px 14px; background:var(--paper)}
+.wa-yellow{border-left-color:#e5b93b; background:#fffaef}
+.wa-orange{border-left-color:#e08a3c; background:#fff4e8}
+.wa-red{border-left-color:#c0392b; background:#fdecea}
+.wa-top{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.wa-badge{font-weight:700; font-size:14px}
+.wa-soon{font-family:var(--mono); font-size:9.5px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.05em; color:var(--ink-soft); background:var(--card);
+  border:1px solid var(--line); border-radius:20px; padding:2px 8px}
+.wa-time{font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); margin-top:4px}
+.wa-desc{font-size:12.5px; line-height:1.5; margin-top:6px; color:var(--ink)}
+
+/* ---------- badge-ek + jegyzet ---------- */
+.badge{font-family:var(--mono); font-size:10px; font-weight:600; letter-spacing:.03em;
+  padding:3px 9px; border-radius:20px; text-transform:uppercase; white-space:nowrap}
+.badge.open{background:var(--green-soft); color:var(--green)}
+.badge.closed{background:var(--brick-soft); color:var(--brick)}
+.badge.warn{background:var(--amber-soft); color:var(--amber)}
+.badge.info{background:var(--blue-soft); color:var(--blue)}
+.muted{color:var(--ink-soft)}
+.source-note{margin-top:14px; font-family:var(--mono); font-size:10px;
+  color:var(--ink-soft); letter-spacing:.02em; line-height:1.55}
+
+/* ---------- gombok ---------- */
+.linkrow{margin-top:16px; display:flex; flex-wrap:wrap; gap:9px}
+.btn{display:inline-block; font-family:var(--mono); font-size:12px; font-weight:600;
+  padding:9px 14px; border-radius:7px; text-decoration:none; letter-spacing:.02em;
+  transition:transform .12s ease}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--green); color:#f2f6f2}
+.btn.ghost{border:1px solid var(--line-strong); color:var(--ink)}
+
+/* ---------- időjárás ---------- */
+.wx-now{display:flex; align-items:center; gap:16px}
+.wx-now .big-ico{font-size:50px; line-height:1}
+.wx-now .temp{font-family:var(--serif); font-size:48px; font-weight:700;
+  color:var(--green); line-height:1; font-variant-numeric:tabular-nums}
+.wx-now .cond{font-size:15px; color:var(--ink-soft); margin-top:4px}
+.wx-meta{display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:14px;
+  font-family:var(--mono); font-size:12px; color:var(--ink-soft)}
+.wx-meta b{color:var(--ink); font-weight:600}
+.wx-days{display:grid; grid-template-columns:repeat(7,1fr); gap:4px;
+  margin-top:18px; border-top:1px solid var(--line); padding-top:16px}
+.wx-day{text-align:center; display:flex; flex-direction:column; gap:4px; align-items:center}
+.wx-day .d{font-family:var(--mono); font-size:10px; text-transform:uppercase; color:var(--ink-soft)}
+.wx-day .di{font-size:22px; line-height:1}
+.wx-day .hi{font-size:13px; font-weight:700; font-variant-numeric:tabular-nums}
+.wx-day .lo{font-size:11.5px; color:var(--ink-soft); font-variant-numeric:tabular-nums}
+.wx-extra{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px;
+  border-top:1px solid var(--line); padding-top:14px}
+.wxs{display:flex; justify-content:space-between; align-items:baseline; gap:8px;
+  font-size:13px; padding:6px 10px; background:var(--paper); border-radius:6px}
+.wxs-l{color:var(--ink-soft); font-size:12px}
+.wxs-v{font-family:var(--mono); font-weight:600; font-variant-numeric:tabular-nums}
+
+/* ---------- radar / műhold ---------- */
+.radar-wrap{position:relative; aspect-ratio:4/3; border-radius:8px; overflow:hidden;
+  border:1px solid var(--line); background:var(--paper)}
+.radar-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+
+/* ---------- hulladéknaptár ---------- */
+.waste-alert{margin-bottom:14px; padding:12px 16px; border-radius:8px;
+  background:linear-gradient(180deg,#26543f,#1c4030); color:#f4f1e6; font-size:14.5px}
+.waste-alert b{color:#e7c579}
+.waste-next{display:grid; grid-template-columns:1fr; gap:10px}
+.wn{display:flex; align-items:center; gap:12px; padding:12px 14px;
+  border:1px solid var(--line); border-radius:8px; background:var(--paper)}
+.wn.soon{background:#fffaef; border-color:var(--amber)}
+.wn .wi{font-size:24px; line-height:1}
+.wn .wl{font-weight:700; font-size:14.5px; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.wtag{font-family:var(--mono); font-size:10px; font-weight:600; text-transform:uppercase;
+  letter-spacing:.04em; color:var(--ink-soft); background:var(--paper);
+  border:1px solid var(--line); border-radius:999px; padding:2px 8px}
+.wn .wd{font-size:12px; color:var(--ink-soft); font-family:var(--mono); margin-top:2px; text-transform:capitalize}
+.wn .wcount{margin-left:auto; text-align:right}
+.wn .wcount .big{font-family:var(--serif); font-size:24px; font-weight:700;
+  color:var(--green); line-height:1; font-variant-numeric:tabular-nums}
+.wn.soon .wcount .big{color:var(--amber)}
+.wn .wcount .u{font-size:10px; color:var(--ink-soft); font-family:var(--mono); text-transform:uppercase}
+.waste-note{margin-top:14px; font-size:12px; line-height:1.5}
+
+/* ---------- hulladéknaptár: „hogyan működik" info ---------- */
+.kuka-help{margin-top:10px}
+.kuka-help summary{display:inline-flex; align-items:center; gap:6px; cursor:pointer;
+  list-style:none; width:fit-content; font-family:var(--mono); font-size:12px;
+  font-weight:600; color:var(--green)}
+.kuka-help summary::-webkit-details-marker{display:none}
+.kuka-help summary:hover{text-decoration:underline}
+.kuka-help-body{margin-top:10px; padding:12px 14px; background:var(--paper);
+  border:1px solid var(--line); border-radius:8px; font-size:12.5px; line-height:1.55}
+.kuka-help-body ol{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:5px}
+.kuka-help-what{margin:12px 0 0; padding:8px 10px; background:var(--green-soft);
+  color:var(--green-d); border-radius:6px}
+.kuka-help-note{margin:12px 0 0; font-size:11.5px; color:var(--ink-soft)}
+
+/* ---------- heti nyitvatartás-csík (közös) ---------- */
+.wh{display:flex; gap:3px; margin-top:10px}
+.wh-d{flex:1; min-width:0; text-align:center; padding:7px 2px; border-radius:6px;
+  background:var(--paper); display:flex; flex-direction:column; gap:1px}
+.wh-d.today{background:var(--amber-soft); box-shadow:inset 0 0 0 1px var(--amber)}
+.wh-day{font-family:var(--mono); font-size:9.5px; text-transform:uppercase;
+  color:var(--ink-soft); letter-spacing:.02em}
+.wh-d.today .wh-day{color:var(--amber); font-weight:700}
+.wh-hrs{font-size:11px; font-weight:600; font-variant-numeric:tabular-nums; line-height:1.2}
+.wh-hrs.off{color:var(--line-strong); font-weight:400}
+
+/* ---------- szolgáltató-blokk (orvos, patika, állatorvos) ---------- */
+.pr-group{margin-top:6px}
+.pr-gh{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--amber); font-weight:700; margin:18px 0 4px}
+.pr-group:first-of-type .pr-gh:first-child{margin-top:4px}
+.pr{padding:14px 0; border-top:1px solid var(--line)}
+.pr-gh + .pr{border-top:none}
+.pr-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+.pr-name{font-weight:700; font-size:15px}
+.pr-role{font-family:var(--mono); font-size:11px; color:var(--ink-soft); margin-top:2px}
+.pr-meta{display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:10px;
+  font-size:12px; color:var(--ink-soft)}
+.pr-meta a{color:var(--green); text-decoration:none}
+.pr-meta a:hover{text-decoration:underline}
+.pr-extra{margin-top:8px; font-size:12px; color:var(--brick); font-family:var(--mono)}
+.pr-area{margin-top:10px}
+.pr-area summary{font-family:var(--mono); font-size:11px; color:var(--ink-soft);
+  cursor:pointer; list-style:none; display:inline-flex; align-items:center; gap:6px;
+  padding:4px 10px; border:1px solid var(--line); border-radius:20px}
+.pr-area summary::-webkit-details-marker{display:none}
+.pr-area summary::before{content:"▸"; color:var(--amber)}
+.pr-area[open] summary::before{content:"▾"}
+.pr-area summary:hover{border-color:var(--line-strong)}
+.pr-area p{margin-top:8px; font-size:12px; color:var(--ink-soft); line-height:1.55}
+
+/* ---------- védőnő ütemezés ---------- */
+.vsched{margin-top:10px; display:flex; flex-direction:column; gap:5px}
+.vs-row{display:flex; justify-content:space-between; gap:12px; font-size:12.5px;
+  padding:6px 10px; background:var(--paper); border-radius:6px}
+.vs-l{color:var(--ink-soft)}
+.vs-w{font-family:var(--mono); font-weight:600; white-space:nowrap; color:var(--ink)}
+
+/* teljes szélességű, vízszintes elrendezés a védőnőknek */
+.dash.grid + .dash.solo{margin-top:18px}
+.dash.solo + .dash.grid{margin-top:18px}
+
+/* ---------- orvosi ügyelet kártya ---------- */
+.ugy-life{display:flex; align-items:center; gap:12px; text-decoration:none;
+  background:linear-gradient(180deg,#b23b2e,#8f2e23); color:#fdeee9;
+  border-radius:10px; padding:14px 16px; margin-bottom:14px}
+.ugy-life:hover{filter:brightness(1.06)}
+.ul-ico{font-size:26px; line-height:1}
+.ul-txt{display:flex; flex-direction:column; gap:2px; min-width:0}
+.ul-txt b{font-size:15px; font-weight:700}
+.ul-sub{font-size:11.5px; opacity:.9; line-height:1.35}
+.ul-num{margin-left:auto; font-family:var(--serif); font-weight:700; font-size:30px;
+  line-height:1; letter-spacing:.02em}
+.ugy-central{display:flex; align-items:center; justify-content:space-between; gap:10px;
+  font-size:14px; font-weight:600}
+.ugy-hours{font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); margin:4px 0 14px}
+.ugy-cols{display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start}
+@media(max-width:620px){ .ugy-cols{grid-template-columns:1fr} }
+.ugy-col{border:1px solid var(--line); border-radius:10px; padding:12px 14px; background:var(--paper)}
+.uc-head{font-family:var(--serif); font-size:16px; font-weight:700; margin-bottom:10px}
+.uc-place{font-size:12.5px; color:var(--ink-soft); margin-bottom:8px; line-height:1.4}
+.uc-line{display:flex; align-items:center; gap:10px; padding:8px 0; border-top:1px solid var(--line)}
+.ucl-txt{min-width:0}
+.uc-line .up-tel{margin-left:auto}
+.uc-item{padding:8px 0; border-top:1px solid var(--line)}
+.uc-item:first-of-type{border-top:none; padding-top:0}
+.uci-kind{font-family:var(--mono); font-size:9.5px; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--amber); font-weight:700; margin-bottom:3px}
+.uci-name{font-weight:700; font-size:13.5px}
+.uci-addr{font-size:12px; color:var(--ink-soft); margin-top:2px}
+.uci-meta{font-family:var(--mono); font-size:11px; color:var(--ink-soft); margin-top:2px}
+.uci-tel{margin:8px 0 0}
+.ugy-desc{font-size:12px; line-height:1.5; color:var(--ink-soft); margin:0 0 14px}
+.ugy-dental{margin-top:16px}
+.ugy-note{margin-top:14px; font-size:11.5px; line-height:1.5; color:var(--ink-soft)}
+.ugy-note a{color:var(--green)}
+.vedono-grid{margin-top:14px; display:grid; align-items:start; gap:18px 26px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.vedono-grid .pr{padding:12px 0 0; border-top:2px solid var(--line)}
+
+/* ---------- gyógyszertár ügyelet ---------- */
+.duty{margin-top:16px; padding:12px 14px; background:var(--amber-soft);
+  border-radius:8px; font-size:12.5px; line-height:1.55}
+.duty a{font-weight:600; white-space:nowrap}
+
+/* ---------- áram-/gázszünet ---------- */
+.outage-body{display:flex; flex-wrap:wrap; align-items:center; gap:14px 24px}
+.outage-body .outage-note{flex:1 1 260px}
+.outage-body .state{flex-basis:100%}
+.outage-body .linkrow{margin-top:0}
+.outage-note{font-size:14px; color:var(--ink-soft); line-height:1.55}
+.outage-list{flex-basis:100%; display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:10px; margin:0}
+.outage-item{padding:12px 14px; border:1px solid var(--line); border-radius:8px; background:var(--paper)}
+.oi-head{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.oi-cons{font-family:var(--mono); font-size:11px; color:var(--ink-soft)}
+.oi-streets{font-size:14px; font-weight:600; margin-top:8px}
+.oi-time{font-family:var(--mono); font-size:12.5px; color:var(--brick); margin-top:4px}
+.oi-desc{font-size:12.5px; color:var(--ink-soft); margin-top:4px}
+
+/* ---------- hírek ---------- */
+.news-list{columns:300px; column-gap:28px}
+.news-item{display:flex; gap:14px; padding:12px 0; border-top:1px solid var(--line);
+  align-items:flex-start; text-decoration:none; break-inside:avoid}
+.news-item:first-child{border-top:none}
+.news-item img{width:58px; height:58px; object-fit:cover; border-radius:7px; flex-shrink:0}
+.news-item .t{font-size:14px; font-weight:600; line-height:1.35; color:var(--ink)}
+.news-item:hover .t{color:var(--amber)}
+.news-item .meta{font-family:var(--mono); font-size:10.5px; color:var(--ink-soft); margin-top:4px}
+
+/* ---------- lábléc ---------- */
+.site-foot{margin-top:56px; padding-top:22px; border-top:1px solid var(--line-strong);
+  display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px;
+  font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); letter-spacing:.02em}
+
+/* ---------- split elrendezés (foci + hírek) ---------- */
+.dash.split{display:grid; grid-template-columns:340px 1fr; gap:18px; align-items:start}
+.dash.split>.card{margin-bottom:0}
+@media(max-width:760px){ .dash.split{grid-template-columns:1fr} }
+
+/* ---------- levegő & pollen ---------- */
+.aqi-now{display:flex; align-items:center; gap:16px}
+.aqi-val{font-family:var(--serif); font-size:46px; font-weight:700; line-height:1;
+  font-variant-numeric:tabular-nums; min-width:1.4em; text-align:center}
+.aqi-label{font-weight:700; font-size:17px; font-family:var(--serif)}
+.aqi-sub{font-size:12px; color:var(--ink-soft); font-family:var(--mono); margin-top:2px}
+.aqi-1{color:#3a8a4f} .aqi-2{color:#6a9a2e} .aqi-3{color:var(--amber)}
+.aqi-4{color:#c26a1e} .aqi-5{color:var(--brick)} .aqi-6{color:#7a2f4a}
+.pollen{margin-top:16px; border-top:1px solid var(--line); padding-top:14px;
+  display:flex; flex-direction:column; gap:8px}
+.pl-row{display:flex; align-items:center; gap:10px; font-size:13.5px}
+.pl-name{font-weight:600}
+.pl-lvl{font-family:var(--mono); font-size:11px; padding:2px 8px; border-radius:20px;
+  text-transform:uppercase; letter-spacing:.02em}
+.pl-lvl.lvl-0{background:var(--green-soft); color:var(--green)}
+.pl-lvl.lvl-1{background:var(--green-soft); color:#3a8a4f}
+.pl-lvl.lvl-2{background:var(--amber-soft); color:var(--amber)}
+.pl-lvl.lvl-3{background:var(--brick-soft); color:var(--brick)}
+.pl-val{margin-left:auto; font-family:var(--mono); font-size:11.5px; color:var(--ink-soft)}
+
+/* ---------- hulladék-naptár ---------- */
+.wcal{margin-top:18px; border-top:1px solid var(--line); padding-top:14px}
+.wcal-ph{margin-top:18px; min-height:250px}
+.wcal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px}
+.wcal-title{font-family:var(--serif); font-weight:700; font-size:16px; text-transform:capitalize}
+.wcal-nav{background:var(--paper); border:1px solid var(--line); border-radius:6px;
+  width:28px; height:28px; font-size:16px; cursor:pointer; color:var(--ink); line-height:1}
+.wcal-nav:hover:not(:disabled){border-color:var(--line-strong)}
+.wcal-nav:disabled{opacity:.35; cursor:default}
+.wcal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:3px}
+.wcal-wd{text-align:center; font-family:var(--mono); font-size:10px; color:var(--ink-soft);
+  text-transform:uppercase; padding-bottom:2px}
+.wcal-cell{aspect-ratio:1; border-radius:6px; background:var(--paper); display:flex;
+  align-items:center; justify-content:center}
+.wcal-cell.empty{background:transparent}
+.wcal-cell.is-ve{background:var(--paper); box-shadow:inset 0 0 0 1px var(--line-strong)}
+.wcal-cell.is-sz{background:#f4d35e}
+.wcal-cell.is-zo{background:#6cbf8a}
+.wcal-cell.is-lo{background:#dd7f5c}
+.wcal-cell.is-sz .wcal-num,
+.wcal-cell.is-zo .wcal-num,
+.wcal-cell.is-lo .wcal-num{color:#17251c; font-weight:700}
+.wcal-cell.today{box-shadow:inset 0 0 0 2px var(--ink)}
+.wcal-cell.today .wcal-num{font-weight:700}
+.wcal-num{font-size:12.5px; font-variant-numeric:tabular-nums}
+.wcal-legend{display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:12px;
+  font-family:var(--mono); font-size:10.5px; color:var(--ink-soft)}
+.wcal-legend>span{display:inline-flex; align-items:center; gap:5px}
+.wsw{width:13px; height:13px; border-radius:3px; display:inline-block}
+.wsw.ve{background:var(--paper); box-shadow:inset 0 0 0 1px var(--line-strong)}
+.wsw.sz{background:#f4d35e}
+.wsw.zo{background:#6cbf8a}
+.wsw.lo{background:#dd7f5c}
+
+/* ---------- áram-bejelentések (hír-fallback) ---------- */
+.outage-ann{flex-basis:100%; border-top:1px solid var(--line); padding-top:12px}
+.oa-head{font-family:var(--mono); font-size:11px; color:var(--amber); font-weight:700;
+  text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px}
+.oa-item{display:block; font-size:13.5px; font-weight:600; color:var(--ink);
+  text-decoration:none; padding:5px 0}
+.oa-item:hover{color:var(--brick); text-decoration:underline}
+
+/* ---------- közmű-szolgáltatók infó-blokk ---------- */
+.util-providers{border-top:1px solid var(--line); padding-top:12px; margin-top:4px}
+.up-head{font-family:var(--mono); font-size:11px; color:var(--ink-soft); font-weight:700;
+  text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px}
+.up-row{display:flex; align-items:center; gap:10px; padding:6px 0; font-size:13.5px}
+.up-ico{font-size:16px; line-height:1; width:20px; text-align:center}
+.up-label{color:var(--ink-soft); min-width:78px}
+.up-name{color:var(--green); text-decoration:none; font-weight:600}
+.up-name:hover{text-decoration:underline}
+.up-tel{margin-left:auto; text-decoration:none; font-family:var(--mono); font-size:12px;
+  font-weight:600; color:var(--green); white-space:nowrap; padding:3px 8px;
+  border:1px solid var(--line); border-radius:20px}
+.up-tel:hover{border-color:var(--green)}
+.up-note{margin-top:10px; font-size:11.5px; line-height:1.5; color:var(--ink-soft)}
+
+/* ---------- foci ---------- */
+.fb{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:16px 30px; align-items:start}
+.fb-results{display:flex; flex-direction:column; gap:6px}
+.fb-res{display:flex; align-items:center; gap:8px; font-size:12.5px}
+.fb-oc{font-family:var(--mono); font-size:9.5px; font-weight:700; width:20px; height:20px;
+  border-radius:5px; display:inline-flex; align-items:center; justify-content:center;
+  flex-shrink:0; color:#fff}
+.fb-oc.oc-w{background:var(--green)} .fb-oc.oc-d{background:var(--amber)}
+.fb-oc.oc-l{background:var(--brick)} .fb-oc.oc-x{background:var(--ink-soft)}
+.fb-res-t{flex:1; font-variant-numeric:tabular-nums}
+.fb-res-d{font-family:var(--mono); font-size:10px; color:var(--ink-soft); white-space:nowrap}
+.fb-lbl{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--amber); font-weight:700; margin-bottom:6px}
+.fb-teams{font-family:var(--serif); font-size:17px; font-weight:600; line-height:1.3}
+.fb-home{color:var(--green); font-weight:700}
+.fb-vs{color:var(--ink-soft)}
+.fb-score{font-weight:700; background:var(--green-soft); color:var(--green);
+  padding:1px 8px; border-radius:5px; font-variant-numeric:tabular-nums}
+.fb-meta{font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); margin-top:5px}
+.fb-standing{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:2px;
+  padding-top:12px; border-top:1px solid var(--line); font-size:13.5px}
+.fb-rank{font-family:var(--serif); font-size:26px; font-weight:700; color:var(--green); line-height:1}
+.fb-standing b{color:var(--ink)}
+.fb-season{margin-left:auto; font-family:var(--mono); font-size:10.5px; color:var(--ink-soft)}
+
+/* ---------- sport: statikus infó-kártya (kézi/kosár, ha nincs élő adat) ---------- */
+.sport-static{display:flex; flex-direction:column; gap:14px}
+.sport-static p{font-size:13px; line-height:1.55; color:var(--ink-soft)}
+.sport-links{display:flex; flex-wrap:wrap; gap:8px}
+.sport-static .btn{align-self:flex-start}
+.hb-season{margin-top:14px}
+.hb-season .fb-rank{color:var(--brick)}
+
+/* ---------- nagy időjárás-térkép + rétegváltó ---------- */
+.radar-tabs{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px}
+.rtab{font-family:var(--mono); font-size:11.5px; font-weight:600; padding:6px 12px;
+  border-radius:20px; border:1px solid var(--line); background:var(--paper);
+  color:var(--ink-soft); cursor:pointer; transition:background .12s, color .12s}
+.rtab:hover{border-color:var(--line-strong)}
+.rtab.on{background:var(--green); color:#f2f6f2; border-color:var(--green)}
+.radar-big{position:relative; height:min(62vh,560px); border-radius:10px; overflow:hidden;
+  border:1px solid var(--line); background:var(--paper)}
+.radar-big iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+/* átlátszó pajzs: elnyeli a görgetést, Ctrl-lel enged át (JS állítja a pointer-events-et) */
+.radar-shield{position:absolute; inset:0; z-index:2; width:100%; height:100%;
+  background:transparent; border:0; padding:0; margin:0; cursor:pointer; display:block}
+.radar-hint{position:absolute; z-index:3; left:50%; bottom:12px; transform:translateX(-50%);
+  pointer-events:none; font-family:var(--mono); font-size:11.5px; font-weight:600;
+  color:#f4f1e6; background:rgba(23,37,28,.72); padding:6px 12px; border-radius:999px;
+  white-space:nowrap; opacity:0; transition:opacity .25s, background .2s}
+.radar-big:hover .radar-hint{opacity:.85}
+.radar-hint.nudge{opacity:1; background:var(--brick)}
+.radar-hint.active{opacity:1; background:rgba(38,84,63,.9)}
+
+/* ---------- 14 napos időjárás-sáv (két sor) ---------- */
+.wx-days-14{gap:9px 4px}
+
+/* ---------- hírek: két kupac ---------- */
+.news-cols{display:grid; grid-template-columns:1fr 1fr; gap:14px 34px}
+.news-cols .news-list{columns:auto}
+.news-ch{font-family:var(--mono); font-size:11.5px; font-weight:700; letter-spacing:.05em;
+  text-transform:uppercase; color:var(--amber); padding-bottom:9px; margin-bottom:2px;
+  border-bottom:2px solid var(--line-strong)}
+@media(max-width:720px){ .news-cols{grid-template-columns:1fr; gap:22px} }
+
+/* ---------- tapadó menüsáv ---------- */
+.snav{position:sticky; top:0; z-index:50; margin-bottom:6px;
+  background:rgba(242,240,230,.86); backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line-strong)}
+.snav-inner{display:flex; align-items:center; gap:18px; height:52px}
+.snav-brand{font-family:var(--serif); font-weight:700; font-size:18px; color:var(--green-d);
+  text-decoration:none; white-space:nowrap}
+.snav-links{display:flex; gap:4px; overflow-x:auto; scrollbar-width:none}
+.snav-links::-webkit-scrollbar{display:none}
+.snav-link{font-family:var(--mono); font-size:12.5px; font-weight:600; color:var(--ink-soft);
+  text-decoration:none; padding:7px 13px; border-radius:20px; white-space:nowrap;
+  transition:background .12s, color .12s}
+.snav-link:hover{color:var(--ink); background:var(--paper-2)}
+.snav-link.on{background:var(--green); color:#f2f6f2}
+
+/* ---------- "MA" hero-sáv ---------- */
+.hero{display:flex; flex-wrap:wrap; gap:1px; background:var(--line); border:1px solid var(--line);
+  border-radius:11px; overflow:hidden; box-shadow:var(--shadow); min-height:58px}
+.hero-cell{background:var(--card); padding:15px 20px; display:flex; align-items:center; gap:8px;
+  font-size:14.5px; color:var(--ink-soft); flex:1 1 auto}
+.hero-cell b{color:var(--ink); font-weight:700}
+.hero-ic{font-size:20px; line-height:1}
+.hero-date{font-family:var(--mono); font-weight:600; color:var(--ink); text-transform:capitalize;
+  background:linear-gradient(180deg,#eef1eb,#e7ece6); flex:0 1 auto}
+.hero-date::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--green);
+  box-shadow:0 0 0 3px rgba(35,80,63,.18); animation:pulse 2.4s ease-in-out infinite; margin-right:2px}
+
+/* ---------- összevont időjárás-panel ---------- */
+.wx-panel{display:grid; grid-template-columns:1fr 1.12fr; gap:18px; align-items:stretch}
+.wx-panel-col{display:flex; flex-direction:column; gap:18px; min-width:0}
+.wx-panel>.card,.wx-panel-col>.card{margin-bottom:0}
+.wx-panel>.radar-card{display:flex; flex-direction:column; height:100%}
+.wx-panel .radar-big{flex:1; height:auto; min-height:460px}
+@media(max-width:900px){
+  .wx-panel{grid-template-columns:1fr}
+  .wx-panel .radar-big{min-height:0; height:min(62vh,520px)}
+}
+
+/* ---------- hulladék kétoszlopos test ---------- */
+.waste-body{display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,360px);
+  gap:32px; align-items:start; margin-top:4px}
+.waste-left{display:flex; flex-direction:column; gap:14px}
+.waste-left .linkrow{margin-top:auto}
+.waste-right .wcal{margin-top:0; border-top:none; padding-top:0}
+@media(max-width:700px){ .waste-body{grid-template-columns:1fr} }
+
+@media(max-width:560px){
+  body{font-size:16px}
+  .masthead{padding:40px 0 20px}
+  .hero-cell{padding:12px 15px; font-size:13.5px}
+  .snav-inner{gap:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+}
