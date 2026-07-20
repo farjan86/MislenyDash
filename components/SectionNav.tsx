@@ -35,7 +35,7 @@ export default function SectionNav() {
     <nav className="snav" aria-label="Szakaszok">
       <div className="snav-inner wrap">
         <a href="#top" className="snav-brand">
-          MislenyDash
+          MislenyMa
         </a>
         <div className="snav-links">
           {SECTIONS.map((s) => (

@@ -8,7 +8,7 @@ export const revalidate = 900; // 15 perc
 const BASE =
   "https://www.eon.hu/content/dam/eon/eon-hungary/external-app-data/outages/";
 const HEADERS = {
-  "User-Agent": "Mozilla/5.0 (compatible; MislenyDash/1.0)",
+  "User-Agent": "Mozilla/5.0 (compatible; MislenyMa/1.0)",
   Referer: "https://www.eon.hu/hu/lakossagi/aram/aramszunet-informaciok.html",
 };
 
@@ -107,7 +107,7 @@ function drvGet(url: string): Promise<string> {
       url,
       {
         rejectUnauthorized: false, // csak a DRV törött láncára, szándékosan
-        headers: { "User-Agent": "Mozilla/5.0 (compatible; MislenyDash/1.0)" },
+        headers: { "User-Agent": "Mozilla/5.0 (compatible; MislenyMa/1.0)" },
         timeout: 8000,
       },
       (res) => {

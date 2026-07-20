@@ -36,7 +36,7 @@ export default function QuickTiles() {
     <nav className="qbar" aria-label="Gyors elérés">
       <div className="qbar-inner wrap">
         <a href="#top" className="qbar-brand">
-          MislenyDash
+          MislenyMa
         </a>
         <div className="qbar-links">
           {LINKS.map((l) => (

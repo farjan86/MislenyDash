@@ -1,5 +1,5 @@
 @echo off
-REM Leallitja a futo mislenydash appot, majd tisztan ujraepiti es elinditja.
+REM Leallitja a futo mislenyma appot, majd tisztan ujraepiti es elinditja.
 REM
 REM FONTOS: csak a megadott porton (alap: 3000) LISTENING allapotban futo
 REM folyamatot allitja le a PID-je alapjan. Szandekosan NEM hasznal

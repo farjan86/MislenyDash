@@ -15,6 +15,7 @@ import UgyeletCard from "@/components/UgyeletCard";
 import FootballCard from "@/components/FootballCard";
 import HandballCard from "@/components/HandballCard";
 import BasketballCard from "@/components/BasketballCard";
+import VisitorCounter from "@/components/VisitorCounter";
 
 function ZoneHead({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
@@ -31,7 +32,7 @@ export default function Home() {
       <header className="masthead">
         <div className="wrap">
           <p className="kicker">Kozármisleny · élő városi adat</p>
-          <h1>MislenyDash</h1>
+          <h1>MislenyMa</h1>
           <p className="sub">
             A város élő adatai egy helyen — időjárás, hulladéknaptár, áramszünet,
             orvos és minden, ami helyben mindennap számít.
@@ -109,7 +110,8 @@ export default function Home() {
         </section>
 
         <footer className="site-foot">
-          <span>MislenyDash · közösségi adat-dashboard</span>
+          <span>MislenyMa · közösségi adat-dashboard</span>
+          <VisitorCounter />
           <span>Kozármisleny, ~6 900 fő</span>
         </footer>
       </div>

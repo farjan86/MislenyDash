@@ -10,7 +10,7 @@ type NewsItem = {
   source: string;
 };
 
-const UA = "Mozilla/5.0 (compatible; MislenyDash/1.0)";
+const UA = "Mozilla/5.0 (compatible; MislenyMa/1.0)";
 
 // Önkormányzati hírarchívum — több oldalt olvasunk a múltért.
 async function townPage(page: number): Promise<NewsItem[]> {

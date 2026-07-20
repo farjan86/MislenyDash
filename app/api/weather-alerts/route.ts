@@ -29,7 +29,7 @@ function param(params: any[], name: string): string {
 export async function GET() {
   try {
     const r = await fetch(FEED, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; MislenyDash/1.0)" },
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; MislenyMa/1.0)" },
       next: { revalidate },
     });
     if (!r.ok) return Response.json({ ok: false, region: REGION_NAME, alerts: [] });

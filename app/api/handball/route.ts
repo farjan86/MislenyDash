@@ -17,7 +17,7 @@ const URLS = [
 async function grab(url: string): Promise<string> {
   try {
     const r = await fetch(url, {
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; MislenyDash/1.0)" },
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; MislenyMa/1.0)" },
       next: { revalidate },
     });
     if (!r.ok) return "";

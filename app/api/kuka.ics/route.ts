@@ -38,7 +38,7 @@ export async function GET(req: Request) {
   const lines: string[] = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//MislenyDash//Kozarmisleny hulladeknaptar//HU",
+    "PRODID:-//MislenyMa//Kozarmisleny hulladeknaptar//HU",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "X-WR-CALNAME:Kozármisleny hulladéknaptár",
