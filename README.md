@@ -22,6 +22,7 @@ Egy naponta használható helyi „infó-műszerfal" Kozármisleny (~6 900 fő) 
 | UI | **React 19.2.4**, TypeScript |
 | Stílus | Sima CSS (`app/globals.css`), design-tokenek `:root`-ban |
 | Adat | Külső API-k + HTML-scrape + statikus JSON |
+| Perzisztencia | **Upstash Redis** (látogatószámláló — serverless-barát, REST-alapú) |
 | Hosting | **Vercel** (serverless, GitHub-push → auto-deploy) |
 
 > ⚠️ **Figyelem:** ez a repo egy módosított Next.js-t használ — az API-k és konvenciók eltérhetnek a megszokottól. Kód írása előtt olvasd a `node_modules/next/dist/docs/` alatti guide-okat (lásd `AGENTS.md`).
@@ -56,12 +57,15 @@ mislenyma/
 │     ├─ kuka.ics/          # hulladéknaptár .ics feed (feliratkozás)
 │     ├─ news/              # helyi + megyei hírek
 │     ├─ football/          # SE Kozármisleny (TheSportsDB)
-│     └─ handball/          # Kozármisleny KA (eredmenyek.com scrape)
+│     ├─ handball/          # Kozármisleny KA (eredmenyek.com scrape)
+│     └─ visits/            # látogatószámláló (Upstash Redis, atomi INCR)
 ├─ components/              # kártyák és UI-elemek (lásd lent)
+│  └─ VisitorCounter.tsx    # footer látogatószámláló (kliens komponens)
 ├─ lib/                     # segédfüggvények (waste, flashscore, hours, useNow)
 ├─ data/
 │  ├─ health.json           # orvos/gyógyszertár/állatorvos/védőnő/ügyelet (STATIKUS)
 │  ├─ waste-2026.json       # hulladéknaptár dátumai (STATIKUS)
+│  ├─ visits.json           # (RÉGI, már nem használt — a szám Redisben; .gitignore-olt)
 │  └─ Kozarmisleny_hulladek.pdf  # forrás-PDF
 ├─ build.bat / commit.bat
 └─ README.md
@@ -83,6 +87,8 @@ Az oldal (`app/page.tsx`) felül egy **ragadós, sötétzöld navigációs sávv
 
 **Segéd-/megosztott komponensek:** `PractitionerBlock`, `WeekHours` (nyitvatartás), `TodayRibbon`, `RadarCard`, `HealthCard`. A `SectionNav` a régi vékony menüsor — **már nincs használatban**, felváltotta a `QuickTiles`.
 
+**Footer:** a láblécben a `VisitorCounter` kliens komponens jeleníti meg az összes látogató számát (`X látogató`). Betöltéskor egy `POST /api/visits` hívással növeli és lekéri az értéket; ha a tároló nincs beállítva (pl. lokálisan), csendben elrejti a számot.
+
 ## 6. Adatforrások — élő vs. statikus
 
 | Adat | Típus | Forrás | Frissül |
@@ -97,6 +103,7 @@ Az oldal (`app/page.tsx`) felül egy **ragadós, sötétzöld navigációs sávv
 | Kosárlabda | Statikus | nincs gépi forrás → link + info | build-idő |
 | Orvos, patika, állatorvos, védőnő, **ügyelet** | Statikus | `data/health.json` | build-idő |
 | Hulladéknaptár dátumai | Statikus | `data/waste-2026.json` (Dél-Kom PDF) | build-idő |
+| **Látogatószámláló** | Élő (perzisztens) | Upstash Redis (`mm:visits` kulcs) | minden látogatáskor |
 
 ## 7. API route-ok részletei
 
@@ -106,6 +113,7 @@ Az oldal (`app/page.tsx`) felül egy **ragadós, sötétzöld navigációs sávv
 - **`/api/news`** — helyi/megyei hírek scrape-elve, cím + link + dátum.
 - **`/api/football`** — TheSportsDB: következő meccs, utolsó eredmények, tabella-pozíció.
 - **`/api/handball`** — eredmenyek.com HTML-be ágyazott Flashscore-feed parse-olása (`lib/flashscore.ts`), Kozármisleny KA meccsei. Best-effort → hiba esetén a kártya statikus infóra vált.
+- **`/api/visits`** — látogatószámláló Upstash Redisszel (`mm:visits` kulcs). `POST` → atomi `INCR` (nincs versenyhelyzet) + `mm_seen` cookie (6 óra) a dedup miatt: egy látogatót 6 órán belül egyszer számol; ha a cookie már megvan, csak visszaadja az aktuális értéket növelés nélkül. `GET` → csak olvas. Ha nincs Redis env beállítva, `{ total: null }`-t ad vissza — nem hibázik, a UI elrejti a számot.
 
 ## 8. Statikus adatfájlok karbantartása
 
@@ -124,6 +132,7 @@ Kulcsok: `pharmacies`, `pharmacyDuty`, `doctors`, `vets`, `healthVisitors`, **`e
 - **Hulladék .ics**: a „push" valójában a telefon **naptár-alkalmazásának helyi emlékeztetője** (feliratkozás → `VALARM`), nem szerver-push.
 - **Windy-térkép** (`RadarMap`): cross-origin iframe fölé „pajzs" — **kattintásra aktiválódik** (lejátszás/nagyítás), az egeret elvéve kikapcsol, hogy az oldal görgetése ne akadjon be.
 - **DRV üzemszünet dátum-kinyerés** (`api/outages` `extractInterval`): a szabadszöveges értesítőből best-effort regex szedi ki az intervallumot (tartomány / egy nap + időablak).
+- **Látogatószámláló Redisben, NEM fájlban** (`api/visits`): a Vercel serverless fájlrendszere **csak olvasható**, a példányok rövid életűek és nincs közös lemez — ezért runtime-ban tilos fájlba írni (`data/*.json` írás `EROFS`-szal elhasal). Bármi, ami munkamenetek közt tartós állapot (számláló, rate-limit stb.), külső tárolóba megy: itt **Upstash Redis** (`@upstash/redis`, REST). Az atomi `INCR` egyben megoldja a párhuzamos kérések versenyhelyzetét is. A kód mindkét env-elnevezést kezeli (`UPSTASH_REDIS_REST_URL/_TOKEN` és a `KV_REST_API_URL/_TOKEN` alias).
 
 ## 10. Design rendszer
 
@@ -136,9 +145,19 @@ Kulcsok: `pharmacies`, `pharmacyDuty`, `doctors`, `vets`, `healthVisitors`, **`e
 ## 11. Deploy (Vercel)
 
 1. `commit.bat` → kód a GitHubra.
-2. Vercel → Import a repo → auto-detektálja a Next.js-t → **Deploy** (nincs env-változó, nincs adatbázis).
+2. Vercel → Import a repo → auto-detektálja a Next.js-t → **Deploy**.
 3. Minden push → automatikus re-deploy.
 4. **Publikusság:** Settings → Deployment Protection → *Vercel Authentication = Disabled* (különben login mögött van).
+
+> ⚠️ **Deploy-blokk privát repónál:** ha a Vercel a push után azt írja, hogy *„… attempted to deploy … but they're not a member of the team"*, akkor a pusholó GitHub-fiók nincs összekötve a projektet birtokló Vercel-fiókkal. Megoldás: **tedd a repót publikussá** (GitHub → Settings → Change visibility), **vagy** a Vercel Authentication beállításánál kösd össze ugyanazt a GitHub-fiókot. (Ezt a projektet a repó publikussá tétele oldotta meg.)
+
+### Upstash Redis (látogatószámláló tárolója)
+A számláló egy hálózaton elérhető tárolót igényel (a serverless fájlrendszer nem perzisztens — lásd §9). Egyszeri beállítás a Vercelen:
+1. **Vercel → a projekt → Storage → Create Database → Upstash → Redis.**
+2. Régió: EU (pl. **Frankfurt / `eu-central-1`**); csomag: **Free** (napi ~10 000 művelet — bőven elég); **Custom Prefix: üresen hagyni** (különben a standard env-nevek elromlanak).
+3. **Environments:** elég a **Production** (a Preview/Development bepipálása a saját tesztelésedet is beleszámolná a nyilvános számba).
+4. **Connect Project → MislenyDash** → a Vercel automatikusan injektálja az env-változókat (`UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`). Kézi másolás nem kell, `.env`-et nem commitolunk.
+5. Következő deploytól él a számláló. Lokálisan (nincs env) a szám egyszerűen nem jelenik meg — ez szándékos.
 
 ### Saját domain (`mislenyma.hu`)
 - Vásárlás magyar regisztrátornál (pl. Rackhost). A `.hu`-t **nem** a Vercel árulja.
@@ -153,6 +172,7 @@ Kulcsok: `pharmacies`, `pharmacyDuty`, `doctors`, `vets`, `healthVisitors`, **`e
 - Az **ügyeleti/egészségügyi adatok statikusak** — kézi frissítést igényelnek, ha a valóság változik (van `updated` dátum és `source` link a JSON-ban).
 - **Kosárlabda:** nincs gépi forrás → csak statikus infó + hivatalos linkek.
 - **Nyári holtszezon:** sportnál/riasztásnál üres lehet — ez korrekt, nem hiba.
+- **Látogatószámláló ≈ egyedi, nem pontos:** böngészőnként/6 óránként egyszer számol (cookie-alapú dedup), nem valódi egyedi-látogató analitika. Aki törli a cookie-t vagy másik eszközről jön, újra beleszámít. Lokálisan és Preview/Development környezetben (ha nincs Redis env) a szám nem jelenik meg.
 
 ---
 

@@ -518,7 +518,11 @@ em{font-style:italic}
 .wx-panel .radar-big{flex:1; height:auto; min-height:460px}
 @media(max-width:900px){
   .wx-panel{grid-template-columns:1fr}
-  .wx-panel .radar-big{min-height:0; height:min(62vh,520px)}
+  /* Egy oszlopban nincs testvér, ami magasságot adna, ezért a flex:1-et
+     ki kell kapcsolni, különben a térkép 0 magasságra esik össze. */
+  /* Egy oszlopban nincs testvér, ami magasságot adna, ezért a flex:1-et
+     ki kell kapcsolni, különben a térkép 0 magasságra esik össze. */
+  .wx-panel .radar-big{flex:none; min-height:0; height:min(62vh,520px)}
 }
 
 /* ---------- hulladék kétoszlopos test ---------- */
