@@ -6,6 +6,7 @@ import RadarMap from "@/components/RadarMap";
 import WeatherAlertCard from "@/components/WeatherAlertCard";
 import WasteCard from "@/components/WasteCard";
 import OutageCard from "@/components/OutageCard";
+import OfficeCard from "@/components/OfficeCard";
 import NewsCard from "@/components/NewsCard";
 import DoctorGroupCard from "@/components/DoctorGroupCard";
 import PharmacyCard from "@/components/PharmacyCard";
@@ -73,6 +74,13 @@ export default function Home() {
           <ZoneHead eyebrow="Közmű" title="Áram, gáz, szolgáltatás" />
           <div className="dash solo">
             <OutageCard />
+          </div>
+        </section>
+
+        <section className="zone" id="hivatal">
+          <ZoneHead eyebrow="Önkormányzat" title="Hivatal és ügyfélfogadás" />
+          <div className="dash solo">
+            <OfficeCard />
           </div>
         </section>
 

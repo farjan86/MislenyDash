@@ -8,6 +8,7 @@ const LINKS = [
   { id: "idojaras", icon: "☀️", label: "Időjárás" },
   { id: "hulladek", icon: "🗑️", label: "Hulladék" },
   { id: "kozmu", icon: "⚡", label: "Áram·gáz·víz" },
+  { id: "hivatal", icon: "🏛️", label: "Hivatal" },
   { id: "egeszseg", icon: "🩺", label: "Egészség" },
   { id: "sport", icon: "⚽", label: "Sport" },
   { id: "hirek", icon: "📰", label: "Hírek" },

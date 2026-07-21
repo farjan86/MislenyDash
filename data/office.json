@@ -1,0 +1,37 @@
+{
+  "name": "Kozármislenyi Közös Önkormányzati Hivatal",
+  "address": "7761 Kozármisleny, Pécsi utca 124.",
+  "phone": "+36 72 570 910",
+  "email": "info@kozarmisleny.hu",
+  "sourceUrl": "https://kozarmisleny.hu/kapcsolat/",
+  "cashierHours": [
+    { "label": "Hétfő", "when": "8:00–12:00, 13:00–17:00" },
+    { "label": "Szerda", "when": "8:00–12:00, 13:00–16:00" }
+  ],
+  "officials": [
+    {
+      "role": "Polgármester",
+      "name": "Dr. Pohl Marietta",
+      "phone": "+36 72 570 914",
+      "email": "polgarmester@kozarmisleny.hu",
+      "when": "Szerda 9:00–11:00",
+      "note": "előzetes egyeztetéssel"
+    },
+    {
+      "role": "Jegyző",
+      "name": "Dr. Göndöcz András",
+      "phone": "+36 72 570 911",
+      "email": "jegyzo@kozarmisleny.hu",
+      "when": "Szerda 9:00–12:00",
+      "note": "előzetes egyeztetéssel"
+    },
+    {
+      "role": "Körzeti megbízott",
+      "name": "Simara Dávid r. zászlós",
+      "phone": "+36 72 570 910",
+      "email": "pecsrk@baranya.police.hu",
+      "address": "Pécs Kertvárosi Rendőrörs, 7632 Pécs, Málomi út 1.",
+      "when": "Csütörtök 9:00–11:00"
+    }
+  ]
+}
