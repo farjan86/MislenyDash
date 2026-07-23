@@ -9,6 +9,7 @@ const LINKS = [
   { id: "hulladek", icon: "🗑️", label: "Hulladék" },
   { id: "kozmu", icon: "⚡", label: "Áram·gáz·víz" },
   { id: "hivatal", icon: "🏛️", label: "Hivatal" },
+  { id: "intezmenyek", icon: "🏫", label: "Intézmények" },
   { id: "egeszseg", icon: "🩺", label: "Egészség" },
   { id: "sport", icon: "⚽", label: "Sport" },
   { id: "hirek", icon: "📰", label: "Hírek" },

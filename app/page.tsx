@@ -7,6 +7,7 @@ import WeatherAlertCard from "@/components/WeatherAlertCard";
 import WasteCard from "@/components/WasteCard";
 import OutageCard from "@/components/OutageCard";
 import OfficeCard from "@/components/OfficeCard";
+import InstitutionsSection from "@/components/InstitutionsSection";
 import NewsCard from "@/components/NewsCard";
 import DoctorGroupCard from "@/components/DoctorGroupCard";
 import PharmacyCard from "@/components/PharmacyCard";
@@ -82,6 +83,11 @@ export default function Home() {
           <div className="dash solo">
             <OfficeCard />
           </div>
+        </section>
+
+        <section className="zone" id="intezmenyek">
+          <ZoneHead eyebrow="A város" title="Intézmények" />
+          <InstitutionsSection />
         </section>
 
         <section className="zone" id="egeszseg">

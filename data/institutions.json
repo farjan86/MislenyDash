@@ -1,0 +1,113 @@
+{
+  "updated": "2026-07-23",
+  "source": "https://kozarmisleny.hu/kozarmislenyrol/intezmenyek/",
+  "categories": [
+    {
+      "id": "oktatas",
+      "eyebrow": "Oktatás",
+      "title": "Iskola, óvoda, bölcsőde",
+      "accent": "blue",
+      "items": [
+        {
+          "icon": "🏫",
+          "name": "Janikovszky Éva Általános Iskola",
+          "kind": "Általános iskola",
+          "address": "7761 Kozármisleny, Alkotmány tér 53.",
+          "phones": ["+36 72 570 083", "+36 30 831 3838"],
+          "email": "jesuli@jesuli.hu",
+          "web": "https://jesuli.hu",
+          "leader": { "role": "Igazgató", "name": "Varga Éva" },
+          "hoursLabel": "Titkárság",
+          "hours": {
+            "mon": [["07:00", "15:00"]], "tue": [["07:00", "15:00"]],
+            "wed": [["07:00", "15:00"]], "thu": [["07:00", "15:00"]],
+            "fri": [["07:00", "15:00"]], "sat": [], "sun": []
+          }
+        },
+        {
+          "icon": "🧸",
+          "name": "Janikovszky Éva Óvoda",
+          "kind": "Óvoda",
+          "address": "7761 Kozármisleny, Alkotmány tér 54.",
+          "phones": ["+36 72 570 043", "+36 72 371 224"],
+          "email": "ovodavezeto@ovikozarmisleny.hu",
+          "web": "https://ovikozarmisleny.hu",
+          "leader": { "role": "Óvodavezető", "name": "Baranyiné Belényesi Éva" }
+        },
+        {
+          "icon": "🍼",
+          "name": "Janikovszky Éva Bölcsőde",
+          "kind": "Bölcsőde",
+          "address": "7761 Kozármisleny, Augusztus 20. tér 1.",
+          "phones": ["+36 72 954 217"],
+          "email": "bolcsodevezeto@ovikozarmisleny.hu",
+          "web": "https://ovikozarmisleny.hu",
+          "leader": { "role": "Bölcsődevezető", "name": "Laklia Ildikó" }
+        }
+      ]
+    },
+    {
+      "id": "szocialis",
+      "eyebrow": "Szociális",
+      "title": "Idősellátás és családsegítés",
+      "accent": "brick",
+      "items": [
+        {
+          "icon": "👵",
+          "name": "Szent Erzsébet Alapellátási Központ – Idősek Klubja",
+          "kind": "Idősek nappali ellátása",
+          "address": "7761 Kozármisleny, Alkotmány tér 24.",
+          "phones": ["+36 72 570 050", "+36 20 772 3968"],
+          "email": "kozarmislenyiidosekklubja@gmail.com",
+          "leader": { "role": "Vezető", "name": "Vetró Gábor" }
+        },
+        {
+          "icon": "🏡",
+          "name": "Dorothea Otthon",
+          "kind": "Idősek otthona · bentlakásos",
+          "address": "7761 Kozármisleny, Pécsi u. 122/2.",
+          "phones": ["+36 72 570 115", "+36 72 570 116", "+36 72 570 127"],
+          "email": "idos2004@gmail.com",
+          "leader": { "role": "Intézményvezető", "name": "Csapi Róbertné" }
+        },
+        {
+          "icon": "👨‍👩‍👧",
+          "name": "Esztergár Lajos Család- és Gyermekjóléti Szolgálat",
+          "kind": "Családsegítés, gyermekjólét",
+          "address": "7621 Pécs, Megye u. 22.",
+          "phones": ["+36 72 532 657", "+36 72 216 307", "+36 30 475 2958"],
+          "email": "kisterseg@ecsgyk.hu",
+          "hoursLabel": "Ügyfélfogadás",
+          "hours": {
+            "tue": [["09:00", "12:00"]],
+            "fri": [["09:00", "14:00"]]
+          },
+          "hoursNote": "Előzetes telefonos időpont-egyeztetéssel."
+        }
+      ]
+    },
+    {
+      "id": "kultura",
+      "eyebrow": "Kultúra",
+      "title": "Művelődés és könyvtár",
+      "accent": "amber",
+      "items": [
+        {
+          "icon": "📚",
+          "name": "Kozármislenyi Művelődési Központ és Könyvtár",
+          "kind": "Művelődési ház, könyvtár",
+          "address": "7761 Kozármisleny, Pécsi u. 1.",
+          "phones": ["+36 30 423 7951"],
+          "email": "konyvtar@mislenykult.hu",
+          "web": "https://www.mislenykult.hu",
+          "hoursLabel": "Könyvtár nyitvatartás",
+          "hours": {
+            "mon": [], "tue": [["10:00", "18:00"]],
+            "wed": [["13:00", "19:00"]], "thu": [["10:00", "18:00"]],
+            "fri": [["13:00", "19:00"]], "sat": [["09:00", "14:00"]], "sun": []
+          }
+        }
+      ]
+    }
+  ]
+}
