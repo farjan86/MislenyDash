@@ -109,11 +109,12 @@ Az oldal (`app/page.tsx`) felül egy **ragadós, sötétzöld navigációs sávv
 
 - **`/api/weather-alerts`** — MeteoAlarm JSON feedből a `hu-HU` nyelvű, `HU23` (Dél-Dunántúl) régióra érvényes, **sárga+** (2. szint felett) és nem lejárt figyelmeztetések. Zöld (1) és lejárt kimarad.
 - **`/api/outages`** — E.ON `poweroutage.json`/`gasoutage.json` (memóriabeli TTL-cache, mert >2 MB, nem fér a Next fetch-cache-be), + DRV víz-scrape. Kozármislenyre szűr. `?city=` paraméterrel más településre is.
-- **`/api/kuka.ics`** — iCalendar feed a hulladéknaptárhoz. Minden ürítés egy esemény + `VALARM` (előző este 18:00 emlékeztető). A vegyes heti ismétlődő (`RRULE:WEEKLY;BYDAY=TU`). Feliratkozás: `webcal://…/api/kuka.ics`.
+- **`/api/kuka.ics`** — iCalendar feed a hulladéknaptárhoz. Minden ürítés egy esemény + `VALARM` (előző este 18:00 emlékeztető). A vegyes heti ismétlődő (`RRULE:WEEKLY;BYDAY=TU`). Feliratkozás: `webcal://…/api/kuka.ics` (iPhone/Mac). **Androidon a `webcal://` sémát semmi nem kezeli**, és a Google Naptár app nem tud URL-re feliratkozni — ott a gomb a `.ics` fájlt adja oda https-en (egyszeri import), mellette „Naptárlink másolása" a calendar.google.com → *URL-ből* feliratkozáshoz (a Google ilyenkor a `VALARM`-ot figyelmen kívül hagyja, a naptár saját értesítés-beállítása él).
 - **`/api/news`** — helyi/megyei hírek scrape-elve, cím + link + dátum.
 - **`/api/football`** — TheSportsDB: következő meccs, utolsó eredmények, tabella-pozíció.
 - **`/api/handball`** — eredmenyek.com HTML-be ágyazott Flashscore-feed parse-olása (`lib/flashscore.ts`), Kozármisleny KA meccsei. Best-effort → hiba esetén a kártya statikus infóra vált.
 - **`/api/visits`** — látogatószámláló Upstash Redisszel (`mm:visits` kulcs). `POST` → atomi `INCR` (nincs versenyhelyzet) + `mm_seen` cookie (6 óra) a dedup miatt: egy látogatót 6 órán belül egyszer számol; ha a cookie már megvan, csak visszaadja az aktuális értéket növelés nélkül. `GET` → csak olvas. Ha nincs Redis env beállítva, `{ total: null }`-t ad vissza — nem hibázik, a UI elrejti a számot.
+- **`/api/feedback`** — az „Ötletek" szakasz (`FeedbackCard`) űrlapját továbbítja e-mailben a fejlesztőnek a **Resend** REST API-n át (npm-csomag nélkül, `fetch`). Env: **`RESEND_API_KEY`** (kötelező a közvetlen küldéshez), opcionális `FEEDBACK_TO` (alap: `lib/contact.ts` `DEV_EMAIL`) és `FEEDBACK_FROM` (alap: `onboarding@resend.dev` — saját domain nélkül a Resend csak a fiók saját címére kézbesít). Spam ellen: rejtett méregcsapda-mező + IP-nként 5 üzenet/óra (Upstash, `mm:feedback:<ip>`). **Ha nincs kulcs:** `503 not_configured`, a kliens ilyenkor a látogató levelezőjét nyitja meg (`mailto:`) a megírt szöveggel.
 
 ## 8. Statikus adatfájlok karbantartása
 

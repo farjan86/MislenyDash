@@ -18,6 +18,7 @@ import FootballCard from "@/components/FootballCard";
 import HandballCard from "@/components/HandballCard";
 import BasketballCard from "@/components/BasketballCard";
 import VisitorCounter from "@/components/VisitorCounter";
+import FeedbackCard from "@/components/FeedbackCard";
 
 function ZoneHead({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
@@ -120,6 +121,13 @@ export default function Home() {
           <ZoneHead eyebrow="A város" title="Helyi és megyei hírek" />
           <div className="dash solo">
             <NewsCard />
+          </div>
+        </section>
+
+        <section className="zone" id="otletek">
+          <ZoneHead eyebrow="Visszajelzés" title="Írd meg a fejlesztőnek a fejlesztési ötleteid" />
+          <div className="dash solo">
+            <FeedbackCard />
           </div>
         </section>
 

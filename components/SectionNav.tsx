@@ -10,6 +10,7 @@ const SECTIONS = [
   { id: "egeszseg", label: "Egészség" },
   { id: "sport", label: "Sport" },
   { id: "hirek", label: "Hírek" },
+  { id: "otletek", label: "Ötletek" },
 ];
 
 export default function SectionNav() {

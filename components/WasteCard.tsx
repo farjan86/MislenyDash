@@ -91,15 +91,14 @@ export default function WasteCard() {
           <details className="kuka-help">
             <summary>ℹ️ Hogyan kapok emlékeztetőt a telefonomra?</summary>
             <div className="kuka-help-body">
+              <p className="kuka-help-os">🍎 iPhone</p>
               <ol>
                 <li>
-                  Nyisd meg ezt az oldalt a <b>telefonodon</b> (ne gépen).
+                  Nyisd meg ezt az oldalt a <b>telefonodon</b>, és koppints a{" "}
+                  <b>🔔 Feliratkozás</b> gombra.
                 </li>
                 <li>
-                  Koppints a <b>🔔 Feliratkozás</b> gombra.
-                </li>
-                <li>
-                  A telefonod Naptára megkérdezi, hozzáadja-e — nyomj <b>Igen</b>-t.
+                  A Naptár megkérdezi, hozzáadja-e — nyomj <b>Igen</b>-t.
                 </li>
               </ol>
               <p className="kuka-help-what">
@@ -107,9 +106,29 @@ export default function WasteCard() {
                 <b>előző estéjén 18:00-kor</b> szól a telefonod — „Holnap kukanap,
                 húzd ki a kukát!" Ha új dátum jön, <b>magától frissül</b>.
               </p>
+
+              <p className="kuka-help-os">🤖 Android</p>
+              <ol>
+                <li>
+                  Koppints a <b>🔔 Hozzáadás a naptárhoz</b> gombra — letölt egy kis
+                  naptárfájlt.
+                </li>
+                <li>
+                  Nyisd meg a letöltött fájlt (<b>Megnyitás</b>), válaszd a{" "}
+                  <b>Naptár</b> alkalmazást, majd add hozzá az eseményeket.
+                </li>
+              </ol>
               <p className="kuka-help-note">
-                A gombot a <b>telefonon</b> nyomd meg — különben a gép naptárába
-                kerül. (Kivéve, ha telefonon és gépen ugyanaz a Google-fiókod.)
+                Így az idei év összes időpontja egyszerre bekerül a naptáradba.
+                Ha nem szólna előző este: a Naptár beállításaiban kapcsold be az{" "}
+                <b>egész napos események értesítését</b> (előző nap 18:00).
+              </p>
+              <p className="kuka-help-note">
+                <b>Magától frissülő változat (Google Naptár):</b> koppints a{" "}
+                <b>🔗 Naptárlink másolása</b> gombra, majd böngészőben (legjobb gépen)
+                nyisd meg a <b>calendar.google.com</b> oldalt → <b>Egyéb naptárak +</b>{" "}
+                → <b>URL-ből</b> → illeszd be. Pár perc múlva a telefonod Naptárában
+                is megjelenik.
               </p>
             </div>
           </details>
@@ -124,13 +143,51 @@ export default function WasteCard() {
 }
 
 function SubscribeButton() {
-  // A webcal-cím csak a kliensen áll össze (mount után), hogy ne legyen hydration-eltérés.
-  const [host, setHost] = useState("");
-  useEffect(() => setHost(window.location.host), []);
-  if (!host) return null;
+  // A címek csak a kliensen állnak össze (mount után), hogy ne legyen hydration-eltérés.
+  const [env, setEnv] = useState<{ host: string; origin: string; android: boolean } | null>(null);
+  const [copied, setCopied] = useState(false);
+  useEffect(
+    () =>
+      setEnv({
+        host: window.location.host,
+        origin: window.location.origin,
+        android: /Android/i.test(navigator.userAgent),
+      }),
+    []
+  );
+  if (!env) return null;
+
+  // iPhone / Mac / asztali gép: a webcal:// linket a rendszer naptára kezeli.
+  if (!env.android) {
+    return (
+      <a className="btn ghost" href={`webcal://${env.host}/api/kuka.ics`}>
+        🔔 Feliratkozás
+      </a>
+    );
+  }
+
+  // Android: a webcal:// sémát semmi nem kezeli (a Chrome nem csinál semmit),
+  // a Google Naptár app pedig nem tud URL-re feliratkozni. Ezért itt a naptárfájlt
+  // adjuk oda https-en (ezt megnyitja a Naptár), mellé a feed címét másolhatóan.
+  const feedUrl = `${env.origin}/api/kuka.ics`;
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(feedUrl);
+    } catch {
+      window.prompt("Másold ki a naptár címét:", feedUrl);
+      return;
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
   return (
-    <a className="btn ghost" href={`webcal://${host}/api/kuka.ics`}>
-      🔔 Feliratkozás
-    </a>
+    <>
+      <a className="btn ghost" href="/api/kuka.ics" download="kozarmisleny-hulladek.ics">
+        🔔 Hozzáadás a naptárhoz
+      </a>
+      <button type="button" className="btn ghost" onClick={copy}>
+        {copied ? "✓ Kimásolva" : "🔗 Naptárlink másolása"}
+      </button>
+    </>
   );
 }
