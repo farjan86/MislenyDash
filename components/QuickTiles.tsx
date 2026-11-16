@@ -15,6 +15,10 @@ const LINKS = [
   { id: "hirek", icon: "📰", label: "Hírek" },
 ];
 
+// „Írj a fejlesztőnek" — az ötletküldő űrlap szekciója. Szándékosan a görgethető
+// linksoron KÍVÜL van, hogy keskeny kijelzőn se csússzon ki a képből.
+const CTA_ID = "otletek";
+
 export default function QuickTiles() {
   const [active, setActive] = useState("");
 
@@ -27,8 +31,8 @@ export default function QuickTiles() {
       },
       { rootMargin: "-25% 0px -65% 0px" }
     );
-    LINKS.forEach((l) => {
-      const el = document.getElementById(l.id);
+    [...LINKS.map((l) => l.id), CTA_ID].forEach((id) => {
+      const el = document.getElementById(id);
       if (el) obs.observe(el);
     });
     return () => obs.disconnect();
@@ -52,6 +56,15 @@ export default function QuickTiles() {
             </a>
           ))}
         </div>
+        <a
+          href={"#" + CTA_ID}
+          className={"qbar-cta" + (active === CTA_ID ? " on" : "")}
+          title="Írd meg a fejlesztőnek a fejlesztési ötleteid"
+        >
+          <span className="qbar-ico">✉️</span>
+          <span className="qbar-cta-long">Írj a fejlesztőnek</span>
+          <span className="qbar-cta-short">Ötlet</span>
+        </a>
       </div>
     </nav>
   );

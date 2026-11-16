@@ -47,10 +47,22 @@ em{font-style:italic}
 .qbar-link:hover{background:rgba(255,255,255,.1); color:#fff}
 .qbar-link.on{background:rgba(255,255,255,.15); color:#fff}
 .qbar-ico{font-size:16px; line-height:1}
+/* „Írj a fejlesztőnek" gomb: a linksor után, de nem görög ki vele együtt */
+.qbar-cta{flex-shrink:0; display:inline-flex; align-items:center; gap:7px; padding:7px 13px;
+  border-radius:8px; white-space:nowrap; text-decoration:none; font-size:14px; font-weight:600;
+  color:#fff; border:1px solid rgba(242,240,230,.45); background:rgba(255,255,255,.08);
+  transition:background .12s, border-color .12s}
+.qbar-cta:hover,.qbar-cta.on{background:rgba(255,255,255,.2); border-color:rgba(242,240,230,.8)}
+.qbar-cta-short{display:none}
+@media(max-width:900px){
+  .qbar-cta-long{display:none}
+  .qbar-cta-short{display:inline}
+}
 @media(max-width:640px){
   .qbar-inner{gap:10px; height:52px}
   .qbar-brand{display:none}
-  .qbar-links{margin-left:0}
+  .qbar-links{margin-left:0; flex:1; min-width:0}
+  .qbar-cta{padding:7px 10px}
 }
 
 /* ---------- masthead ---------- */

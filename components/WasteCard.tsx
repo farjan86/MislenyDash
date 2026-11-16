@@ -40,7 +40,8 @@ export default function WasteCard() {
       }).filter((r): r is NonNullable<typeof r> => r !== null),
     ].map((r) => ({ ...r, days: daysUntil(r.iso, now) }));
 
-  const tomorrow = rows && rows.find((r) => r.days === 1);
+  // Holnap több kuka is mehet egyszerre (pl. vegyes + szelektív) — mindet kiírjuk.
+  const tomorrow = rows ? rows.filter((r) => r.days === 1) : [];
 
   return (
     <div className="card accent-amber">
@@ -52,9 +53,16 @@ export default function WasteCard() {
         <span className="updated">2026 · Dél-Kom</span>
       </div>
 
-      {tomorrow && (
+      {tomorrow.length > 0 && (
         <div className="waste-alert">
-          {tomorrow.icon} Holnap <b>{tomorrow.label.toLowerCase()}</b> — húzd ki a kukát!
+          {tomorrow.map((r) => r.icon).join(" ")} Holnap{" "}
+          {tomorrow.map((r, i) => (
+            <span key={r.key}>
+              {i > 0 && (i === tomorrow.length - 1 ? " és " : ", ")}
+              <b>{r.label.toLowerCase()}</b>
+            </span>
+          ))}{" "}
+          — húzd ki {tomorrow.length > 1 ? "a kukákat" : "a kukát"}!
         </div>
       )}
 
